@@ -29,9 +29,9 @@ export default function ConfigGeneratorPage() {
   const generateConfig = useCallback((rawData = null) => {
     let dataToProcess;
 
-    if (rawData) {
+    if (rawData) { // Data provided directly (e.g., from successful fetch)
       dataToProcess = rawData;
-    } else {
+    } else { // Use data from textarea
       if (!jsonInput) {
         showToast("Không có dữ liệu JSON để tạo config. Vui lòng dán hoặc tải từ API.", "error");
         return;
@@ -66,7 +66,8 @@ export default function ConfigGeneratorPage() {
     }
   }, [jsonInput, showToast]);
 
-  const fetchDataAndGenerate = useCallback(async () => {
+  const fetchDataAndGenerateOnLoad = useCallback(async () => {
+    setJsonInput(""); // Clear previous input
     setOutputYaml("Đang tải dữ liệu từ API...");
     try {
       const response = await fetch(API_URL);
@@ -79,16 +80,17 @@ export default function ConfigGeneratorPage() {
       showToast("Dữ liệu đã được tải và config đã được tạo!");
     } catch (error) {
       showToast(
-        "Không thể tải dữ liệu từ API: " + error.message + "\nVui lòng kiểm tra http://localhost:20128/v1/models có đang chạy không.",
+        "Không thể tải dữ liệu từ API: " + error.message + "\nVui lòng kiểm tra http://localhost:20128/v1/models có đang chạy không. Hoặc nhập JSON thủ công.",
         "error"
       );
-      setOutputYaml("Không thể tải dữ liệu.");
+      setJsonInput(""); // Clear textarea to allow manual input
+      setOutputYaml("Không thể tải dữ liệu. Vui lòng nhập JSON thủ công vào ô trên và nhấn 'Tạo Config (Input)'.");
       console.error("Error fetching data:", error);
     }
   }, [generateConfig, showToast]);
 
   const copyResult = useCallback(() => {
-    if (outputYaml === "Chờ dữ liệu..." || outputYaml === "Không thể tải dữ liệu." || !outputYaml) {
+    if (outputYaml === "Chờ dữ liệu..." || outputYaml.includes("Không thể tải dữ liệu.") || !outputYaml) {
       showToast("Không có cấu hình để sao chép!", "error");
       return;
     }
@@ -105,8 +107,8 @@ export default function ConfigGeneratorPage() {
 
   // Fetch data and generate config when the page loads
   useEffect(() => {
-    fetchDataAndGenerate();
-  }, [fetchDataAndGenerate]); // Dependency on fetchDataAndGenerate
+    fetchDataAndGenerateOnLoad();
+  }, [fetchDataAndGenerateOnLoad]); // Dependency on fetchDataAndGenerateOnLoad
 
   return (
     <main className="flex-center-page">
@@ -115,19 +117,23 @@ export default function ConfigGeneratorPage() {
       <div className="container-wrapper">
         <h2>🚀 9Router Config Generator</h2>
         <p className="description">
-          Dán dữ liệu JSON từ <code>http://localhost:20128/v1/models</code> vào ô dưới đây để tạo cấu hình YAML cho 9Router của bạn. Đảm bảo định dạng JSON là chính xác.
+          Công cụ này tự động tải dữ liệu JSON từ <code>{API_URL}</code> để tạo cấu hình YAML. 
+          Nếu không tải được hoặc bạn muốn dùng JSON khác, bạn có thể dán dữ liệu vào ô dưới đây và nhấn "Tạo Config (Input)".
         </p>
 
         <div className="card">
           <textarea
-            placeholder="Dán JSON từ http://localhost:20128/v1/models vào đây..."
+            placeholder="Dán dữ liệu JSON vào đây để tạo cấu hình YAML..."
             value={jsonInput}
             onChange={(e) => setJsonInput(e.target.value)}
           ></textarea>
 
           <div className="controls">
-            <button className="btn-generate" onClick={fetchDataAndGenerate}>
-              Tải & Tạo Config
+            <button className="btn-generate" onClick={fetchDataAndGenerateOnLoad}>
+              Tải lại từ API
+            </button>
+            <button className="btn-generate" onClick={() => generateConfig(null)}> {/* Calls generateConfig with no rawData, so it uses jsonInput */}
+              Tạo Config (Input)
             </button>
             <button className="btn-copy" onClick={copyResult}>
               Copy Kết Quả
