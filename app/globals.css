@@ -1,26 +1,273 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Dark Mode Subtle Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg-primary: #1a1a1f; /* Very dark background */
+  --bg-secondary: #25252a; /* Slightly lighter for cards */
+  --text-light: #e0e0e0;
+  --text-muted-custom: #a0a0a5;
+  --accent-color: #007bff; /* Blue accent */
+  --accent-color-light: #66b3ff;
+  --accent-color-green: #28a745;
+  --border-color: #333;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --focus-glow: rgba(0, 123, 255, 0.3);
+  --code-bg: #111;
+  --code-text: #e2e2e2;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-light);
+  /* Uses the font variables from layout.tsx */
+  font-family: var(--font-geist-sans), sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  line-height: 1.6;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility classes for layout */
+.flex-center-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 30px 20px;
+  min-height: 100vh;
+}
+
+.container-wrapper {
+  max-width: 900px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: var(--accent-color);
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 700;
+  font-size: 2.8em;
+  letter-spacing: -0.5px;
+  text-shadow: 0 0 10px var(--accent-color);
+}
+
+.description {
+  text-align: center;
+  color: var(--text-muted-custom);
+  margin-bottom: 30px;
+  font-size: 1.05em;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 20px;
+}
+
+.card {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 6px 20px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+textarea {
+  width: 100%;
+  height: 180px;
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  font-size: 0.95em;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+textarea::placeholder {
+  color: var(--text-muted-custom);
+}
+
+textarea:focus {
+  border-color: var(--accent-color-light);
+  box-shadow: 0 0 0 3px var(--focus-glow);
+  outline: none;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  justify-content: center;
+}
+
+button {
+  padding: 12px 25px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-size: 1em;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.btn-generate {
+  background: var(--accent-color);
+}
+
+.btn-copy {
+  background: var(--accent-color-green);
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+h3 {
+  color: var(--text-light);
+  margin-bottom: 15px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 2em;
+}
+
+pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
+}
+
+pre:hover {
+  box-shadow: 0 4px 15px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+/* Toast Notification Styles */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background-color: var(--bg-secondary);
+  color: var(--text-light);
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  transform: translateX(100%);
+  animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast.error {
+  background-color: #dc3545;
+  border-color: #bd2130;
+  color: white;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flex-center-page {
+    padding: 15px;
+  }
+  h2 {
+    font-size: 2em;
+  }
+  .description {
+    font-size: 0.95em;
+  }
+  .card {
+    padding: 20px;
+  }
+  .controls {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  button {
+    width: 100%;
+    font-size: 0.95em;
+    padding: 10px 20px;
+  }
+  textarea {
+    height: 150px;
+    font-size: 0.9em;
+  }
+  pre {
+    font-size: 0.85em;
+    padding: 15px;
+  }
+  #toast-container {
+    top: 10px;
+    right: 10px;
+  }
+  .toast {
+    padding: 10px 15px;
+    font-size: 0.85em;
+  }
 }
