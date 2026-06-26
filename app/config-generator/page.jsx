@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+
+const API_URL = "http://localhost:20128/v1/models"; // Define your API endpoint
 
 export default function ConfigGeneratorPage() {
   const [jsonInput, setJsonInput] = useState("");
   const [outputYaml, setOutputYaml] = useState("Chờ dữ liệu...");
-  const toastContainerRef = useRef(null);
+  const toastContainerRef = useRef(null); // Ref for the toast container
 
   const showToast = useCallback((message, type = "success", duration = 3000) => {
     if (!toastContainerRef.current) return;
@@ -21,37 +23,72 @@ export default function ConfigGeneratorPage() {
 
     setTimeout(() => {
       toast.remove();
-    }, duration + 500);
+    }, duration + 500); // 500ms for fadeOut animation
   }, []);
 
-  const generateConfig = useCallback(() => {
-    if (!jsonInput) {
-      showToast("Vui lòng dán dữ liệu JSON vào ô.", "error");
-      return;
-    }
-    try {
-      const jsonObj = JSON.parse(jsonInput);
-      if (!jsonObj.data || !Array.isArray(jsonObj.data)) {
-        showToast("Dữ liệu JSON không hợp lệ: thiếu trường 'data' hoặc không phải mảng.", "error");
+  const generateConfig = useCallback((rawData = null) => {
+    let dataToProcess;
+
+    if (rawData) {
+      dataToProcess = rawData;
+    } else {
+      if (!jsonInput) {
+        showToast("Không có dữ liệu JSON để tạo config. Vui lòng dán hoặc tải từ API.", "error");
         return;
+      }
+      try {
+        dataToProcess = JSON.parse(jsonInput);
+      } catch (e) {
+        showToast("Dữ liệu JSON không hợp lệ! Vui lòng kiểm tra lại cấu trúc.", "error");
+        return;
+      }
+    }
+
+    try {
+      if (!dataToProcess || !Array.isArray(dataToProcess.data)) {
+        throw new Error("Cấu trúc dữ liệu không hợp lệ: thiếu trường 'data' hoặc không phải mảng.");
       }
 
       let yamlOutput = "name: Main Config\nversion: 1.0.0\nschema: v1\nmodels:\n";
 
-      jsonObj.data.forEach((item) => {
+      dataToProcess.data.forEach((item) => {
         let name = item.id.replace(/\//g, " ").toUpperCase();
         yamlOutput += `  - name: ${name}\n    provider: openai\n    model: ${item.id}\n    apiBase: http://localhost:20128/v1\n    apiKey: sk-1056d36af4d8465f-6mvyql-dc5de0b1\n    roles: [chat, edit]\n\n`;
       });
 
       setOutputYaml(yamlOutput);
-      showToast("Config đã được tạo thành công!");
+      if (!rawData) { // Only show success toast if manually generated
+        showToast("Config đã được tạo thành công!");
+      }
     } catch (e) {
-      showToast("Dữ liệu JSON không hợp lệ! Vui lòng kiểm tra lại cấu trúc.", "error");
+      showToast("Lỗi khi tạo config: " + e.message, "error");
+      console.error("Error generating config:", e);
     }
   }, [jsonInput, showToast]);
 
+  const fetchDataAndGenerate = useCallback(async () => {
+    setOutputYaml("Đang tải dữ liệu từ API...");
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setJsonInput(JSON.stringify(data, null, 2)); // Display fetched JSON in textarea
+      generateConfig(data); // Generate config with fetched data
+      showToast("Dữ liệu đã được tải và config đã được tạo!");
+    } catch (error) {
+      showToast(
+        "Không thể tải dữ liệu từ API: " + error.message + "\nVui lòng kiểm tra http://localhost:20128/v1/models có đang chạy không.",
+        "error"
+      );
+      setOutputYaml("Không thể tải dữ liệu.");
+      console.error("Error fetching data:", error);
+    }
+  }, [generateConfig, showToast]);
+
   const copyResult = useCallback(() => {
-    if (outputYaml === "Chờ dữ liệu..." || !outputYaml) {
+    if (outputYaml === "Chờ dữ liệu..." || outputYaml === "Không thể tải dữ liệu." || !outputYaml) {
       showToast("Không có cấu hình để sao chép!", "error");
       return;
     }
@@ -65,6 +102,11 @@ export default function ConfigGeneratorPage() {
         console.error("Could not copy text: ", err);
       });
   }, [outputYaml, showToast]);
+
+  // Fetch data and generate config when the page loads
+  useEffect(() => {
+    fetchDataAndGenerate();
+  }, [fetchDataAndGenerate]); // Dependency on fetchDataAndGenerate
 
   return (
     <main className="flex-center-page">
@@ -84,8 +126,8 @@ export default function ConfigGeneratorPage() {
           ></textarea>
 
           <div className="controls">
-            <button className="btn-generate" onClick={generateConfig}>
-              Tạo Config
+            <button className="btn-generate" onClick={fetchDataAndGenerate}>
+              Tải & Tạo Config
             </button>
             <button className="btn-copy" onClick={copyResult}>
               Copy Kết Quả
