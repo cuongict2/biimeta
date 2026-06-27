@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 const API_URL = "http://localhost:20128/v1/models"; // Define your API endpoint
 
+
 export default function ConfigGeneratorPage() {
   const [jsonInput, setJsonInput] = useState("");
   const [outputYaml, setOutputYaml] = useState("Chờ dữ liệu...");
