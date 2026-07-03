@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google"; // Xóa Geist nếu không dùng nữa, giữ Geist_Mono
+import { Inter } from "next/font/google"; // Đổi sang Inter
 import "./globals.css";
 
-const geistSans = Geist({
+// Thay thế Geist bằng Nunito, giữ nguyên tên biến
+const geistSans = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -12,6 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Xóa khai báo Nunito riêng biệt nếu bạn muốn Nunito thay thế hoàn toàn Geist Sans
 export const metadata: Metadata = {
   title: "9Router Config Generator",
   description: "9Router Config Generator",
@@ -25,9 +28,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      // Chỉ truyền `geistSans.variable` và `geistMono.variable`
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
+

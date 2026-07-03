@@ -10,6 +10,8 @@ export default function ConfigGeneratorPage() {
   const [outputYaml, setOutputYaml] = useState("Chờ dữ liệu...");
   const toastContainerRef = useRef(null); // Ref for the toast container
 
+  console.log("ConfigGeneratorPage rendered. Current outputYaml state:", outputYaml);
+
   const showToast = (message, type = "success", duration = 3000) => {
     if (!toastContainerRef.current) return;
 
@@ -46,25 +48,39 @@ export default function ConfigGeneratorPage() {
   };
 
   const handleFetch = async () => {
+    console.log("handleFetch called!");
     setJsonInput(""); // Clear previous input
     setOutputYaml("Đang tải dữ liệu từ API...");
+
+    // Set timeout for fetch request (e.g., 5 seconds)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     try {
-      const response = await fetch(API_URL);
+      console.log("Fetching API from:", API_URL);
+      const response = await fetch(API_URL, { signal: controller.signal });
+      clearTimeout(timeoutId);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log("Fetch success, data:", data);
       setJsonInput(JSON.stringify(data, null, 2)); // Display fetched JSON in textarea
       processData(data);
       showToast("Dữ liệu đã được tải và config đã được tạo!");
     } catch (error) {
+      clearTimeout(timeoutId);
+      let errorMessage = error.message;
+      if (error.name === 'AbortError') {
+        errorMessage = "Kết nối quá hạn (Timeout) sau 5 giây.";
+      }
+      console.error("Fetch failed with error:", error);
       showToast(
-        "Không thể tải dữ liệu từ API: " + error.message + "\nVui lòng kiểm tra http://localhost:20128/v1/models có đang chạy không. Hoặc nhập JSON thủ công.",
+        "Không thể tải dữ liệu từ API: " + errorMessage + "\nVui lòng kiểm tra http://localhost:20128/v1/models có đang chạy không. Hoặc nhập JSON thủ công.",
         "error"
       );
       setJsonInput(""); // Clear textarea to allow manual input
-      setOutputYaml("Không thể tải dữ liệu. Vui lòng nhập JSON thủ công vào ô trên và nhấn 'Tạo Config (Input)'.");
-      console.error("Error fetching data:", error);
+      setOutputYaml("Không thể tải dữ liệu từ API (Timeout hoặc Lỗi kết nối). Vui lòng đảm bảo dịch vụ ở port 20128 đang chạy, hoặc dán JSON thủ công vào ô trên và nhấn 'Tạo Config (Input)'.");
     }
   };
 
@@ -82,6 +98,7 @@ export default function ConfigGeneratorPage() {
   };
   // Fetch data and generate config when the page loads
   useEffect(() => {
+    console.log("useEffect triggered!");
     handleFetch();
   }, []);
   return (

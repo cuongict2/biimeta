@@ -2,6 +2,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Bước 1: Khởi tạo Git trong thư mục dự án
+git init
+Bước 2: Thêm các tệp vào Git và lưu lại thay đổi
+git add .
+Bước 3: Liên kết với kho lưu trữ trên GitHub
+git remote add origin <ĐƯỜNG_DẪN_REPO_CỦA_BẠN>
+Bước 4: Đổi nhánh mặc định thành 'main' và đẩy code lên
+git branch -M main
+git push -u origin main
+
+
 First, run the development server:
 
 ```bash
