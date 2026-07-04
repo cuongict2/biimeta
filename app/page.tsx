@@ -81,6 +81,30 @@ export default async function Home() {
         </Link>
       </div>
       </section>
+
+        <section style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#e0e0e0' }}>Project Dashboard</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
+          <Link
+            href="/coffe"
+            target="_blank"
+            style={{
+              padding: '25px',
+            backgroundColor: '#25252a',
+            border: '1px solid #333',
+              borderRadius: '12px',
+              textDecoration: 'none',
+            color: '#007bff',
+            fontWeight: '600',
+              fontSize: '1.2rem',
+              textAlign: 'center',
+              transition: '0.3s'
+          }}
+        >
+          Coffee Management System
+        </Link>
+      </div>
+      </section>
     </main>
   );
 }
