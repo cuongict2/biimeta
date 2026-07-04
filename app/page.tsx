@@ -59,7 +59,7 @@ export default async function Home() {
       </section>
 
           <section style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#e0e0e0' }}>Project Dashboard</h2>
+        <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#e0e0e0' }}>My Project</h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
           <Link
             href="/9router_config"
@@ -80,13 +80,10 @@ export default async function Home() {
             🚀 9Router Config Generator
         </Link>
       </div>
-      </section>
 
-        <section style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#e0e0e0' }}>Project Dashboard</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
           <Link
-            href="/coffe"
+            href="/coffee"
             target="_blank"
             style={{
               padding: '25px',
@@ -104,6 +101,8 @@ export default async function Home() {
           Coffee Management System
         </Link>
       </div>
+
+
       </section>
     </main>
   );
