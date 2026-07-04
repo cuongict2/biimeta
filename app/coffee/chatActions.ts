@@ -1,92 +1,75 @@
 "use server";
 
-import fs from "fs";
-import path from "path";
 import { supabase } from "@/lib/supabase";
+import { revalidatePath } from "next/cache";
 
-const CHAT_FILE = path.join(process.cwd(), "chat_messages.json");
-
+// Giữ nguyên interface này để khớp với code phía client
 export interface Message {
   id: string;
+  created_at: string; // Sử dụng lại tên này để không cần sửa client
   sender: string;
-  text?: string; // Text có thể không bắt buộc nếu gửi ảnh
-  imageUrl?: string;
-  timestamp: string;
+  text?: string;
+  imageUrl?: string; // Sử dụng lại tên này
 }
 
-// Danh sách từ cấm nói bậy
-const BAD_WORDS = [
-  "địt", "đm", "vcl", "vl", "cặc", "lồn", "chó", "đéo", "buồi", 
-  "fuck", "bitch", "shit", "cút", "dâm", "đm", "dkm", "clm", "clgt"
-];
-
-// Hàm lọc từ tục tĩu
-function filterBadWords(text: string): string {
-  let filtered = text;
-  BAD_WORDS.forEach((word) => {
-    const regex = new RegExp(word, "gi");
-    filtered = filtered.replace(regex, "***");
-  });
-  return filtered;
-}
-
-// Đọc tin nhắn từ file JSON và tự động xóa tin nhắn cũ hơn 1 ngày
+// Lấy tin nhắn từ CƠ SỞ DỮ LIỆU
 export async function getMessages(): Promise<Message[]> {
-  try {
-    if (!fs.existsSync(CHAT_FILE)) {
-      fs.writeFileSync(CHAT_FILE, JSON.stringify([]));
+  const { data, error } = await supabase
+    .from("messages")
+    .select("*")
+    .order("created_at", { ascending: true }) // Sắp xếp theo thời gian
+    .limit(100); // Giới hạn lấy 100 tin nhắn gần nhất
+
+  if (error) {
+    console.error("Lỗi khi lấy tin nhắn:", error);
       return [];
     }
 
-    const data = fs.readFileSync(CHAT_FILE, "utf8");
-    const messages: Message[] = JSON.parse(data || "[]");
-
-    // Lọc tin nhắn trong vòng 24 giờ
-    const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-    const activeMessages = messages.filter(
-      (msg) => new Date(msg.timestamp).getTime() > oneDayAgo
-    );
-
-    // Nếu có tin nhắn bị xóa, ghi lại file
-    if (activeMessages.length !== messages.length) {
-      fs.writeFileSync(CHAT_FILE, JSON.stringify(activeMessages, null, 2));
-    }
-
-    return activeMessages;
-  } catch (err) {
-    console.error("Lỗi đọc chat:", err);
-    return [];
-  }
+  // Map lại tên cột từ database (image_url) sang tên mà client đang dùng (imageUrl)
+  return data.map(msg => ({
+    id: msg.id,
+    created_at: msg.created_at,
+    sender: msg.sender,
+    text: msg.text,
+    imageUrl: msg.image_url,
+  }));
 }
 
-// Gửi tin nhắn mới
-export async function sendMessage(sender: string, content: { text?: string, imageUrl?: string }) {
-  try {
-    if (!sender.trim() || (!content.text?.trim() && !content.imageUrl?.trim())) {
-      return { success: false, error: "Nội dung trống" };
-    }
+// Gửi tin nhắn và LƯU VÀO CƠ SỞ DỮ LIỆU
+export async function sendMessage(
+  nickname: string,
+  content: { text?: string; imageUrl?: string }
+) {
+  if ((!content.text || !content.text.trim()) && !content.imageUrl) {
+    return { success: false, error: "Nội dung tin nhắn không được để trống" };
+  }
 
-    const messages = await getMessages();
+  const { data, error } = await supabase
+    .from("messages")
+    .insert({
+      sender: nickname,
+      text: content.text,
+      image_url: content.imageUrl, // Lưu vào cột image_url
+    })
+    .select()
+    .single();
 
+  if (error) {
+    console.error("Lỗi khi gửi tin nhắn:", error);
+    return { success: false, error: error.message };
+  }
+
+  // Thông báo cho Next.js rằng dữ liệu của trang này đã thay đổi
+  revalidatePath("/coffee/order");
+
+  // Tạo đối tượng trả về cho client với đúng cấu trúc
     const newMessage: Message = {
-      id: Math.random().toString(36).substring(2, 9),
-      sender: filterBadWords(sender),
-      timestamp: new Date().toISOString(),
+    id: data.id,
+    created_at: data.created_at,
+    sender: data.sender,
+    text: data.text,
+    imageUrl: data.image_url,
     };
 
-    if (content.text) {
-      newMessage.text = filterBadWords(content.text);
-    }
-    if (content.imageUrl) {
-      newMessage.imageUrl = content.imageUrl;
-    }
-
-
-    messages.push(newMessage);
-    fs.writeFileSync(CHAT_FILE, JSON.stringify(messages, null, 2));
-
     return { success: true, message: newMessage };
-  } catch (err: any) {
-    return { success: false, error: err.message };
   }
-}
