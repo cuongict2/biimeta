@@ -69,6 +69,7 @@ function CustomerOrderContent() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
+  // States for Chat
   const [messages, setMessages] = useState<Message[]>([]);
   const [nickname, setNickname] = useState("");
   const [chatInput, setChatInput] = useState("");
@@ -90,6 +91,7 @@ function CustomerOrderContent() {
     }
   }, [messages, activeTab]);
 
+  // States for Menu
   const [menuItems, setMenuItems] = useState<any[]>([]);
   const [menuCategories, setMenuCategories] = useState<string[]>(["Tất cả"]);
   const [menuLoading, setMenuLoading] = useState(true);
