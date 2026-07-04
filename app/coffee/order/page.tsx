@@ -631,7 +631,7 @@ function CustomerOrderContent() {
                     </div>
                     {/* Thời gian */}
                     <span style={{ fontSize: "0.6rem", color: "#52525b", marginTop: "3px", marginLeft: isMe ? "0" : "6px", marginRight: isMe ? "6px" : "0" }}>
-                      {new Date(msg.timestamp).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
+                      {new Date(msg.created_at).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
                 );
