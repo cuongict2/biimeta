@@ -609,37 +609,42 @@ function CustomerOrderContent() {
   return (
     <div 
       key={msg.id} 
-      className="message-entry" // <--- THÊM DÒNG NÀY VÀO
-      style={{ display: "flex", flexDirection: "column", alignItems: isMe ? "flex-end" : "flex-start", marginBottom: "12px" }}
+      className="message-entry"
+      style={{ 
+        display: "flex", 
+        flexDirection: "row", 
+        alignItems: "flex-end", // Căn đáy cho thẳng hàng
+        justifyContent: isMe ? "flex-end" : "flex-start",
+        marginBottom: "8px",
+        gap: "6px" // Khoảng cách giữa tên - tin nhắn - thời gian
+      }}
     >
-      {/* Tên người gửi */}
-      <span style={{ fontSize: "0.7rem", color: isMe ? "#22d3ee" : "#a1a1aa", marginBottom: "3px", marginLeft: isMe ? "0" : "6px", marginRight: isMe ? "6px" : "0" }}>
-        {msg.sender}
-      </span>
-      {/* Bong bóng chat */}
+      {/* 1. Tên người gửi (Bỏ nếu là tin nhắn của mình để tiết kiệm chỗ) */}
+      {!isMe && (
+        <span style={{ fontSize: "0.7rem", color: "#a1a1aa", fontWeight: "bold" }}>
+          {msg.sender}:
+        </span>
+      )}
+
+      {/* 2. Bong bóng chat */}
       <div style={{
-        maxWidth: "80%",
-        background: isMe ? "linear-gradient(135deg, #10b981, #059669)" : "rgba(255,255,255,0.06)",
+        maxWidth: "60%", // Giới hạn độ rộng để chừa chỗ cho thời gian
+        background: isMe ? "#10b981" : "rgba(255,255,255,0.1)",
         color: "#fff",
-        padding: msg.imageUrl ? "4px" : "10px 14px",
-        borderRadius: isMe ? "16px 16px 2px 16px" : "16px 16px 16px 2px",
-        fontSize: "0.88rem",
-        lineHeight: "1.4",
-        wordBreak: "break-word",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+        padding: "6px 10px",
+        borderRadius: "12px",
+        fontSize: "0.85rem",
+        wordBreak: "break-word"
       }}>
         {msg.imageUrl ? (
-          <img
-            src={msg.imageUrl}
-            alt="Ảnh chat"
-            style={{ maxWidth: "100%", borderRadius: "14px", display: "block" }}
-          />
+          <img src={msg.imageUrl} alt="Ảnh" style={{ maxWidth: "100px", borderRadius: "8px" }} />
         ) : (
-          <span dangerouslySetInnerHTML={{ __html: (msg.text || "").replace(/\[YAHOO:([^\]]+)\]/g, '<img src="/yahoo_icons/$1" style="width:24px; height:24px; display:inline-block; vertical-align:middle; margin:0 2px;" />') }} />
+          <span dangerouslySetInnerHTML={{ __html: (msg.text || "").replace(/\[YAHOO:([^\]]+)\]/g, '<img src="/yahoo_icons/$1" style="width:20px; height:20px; vertical-align:middle;" />') }} />
         )}
       </div>
-      {/* Thời gian */}
-      <span style={{ fontSize: "0.6rem", color: "#52525b", marginTop: "3px", marginLeft: isMe ? "0" : "6px", marginRight: isMe ? "6px" : "0" }}>
+
+      {/* 3. Thời gian */}
+      <span style={{ fontSize: "0.6rem", color: "#52525b", flexShrink: 0 }}>
         {new Date(msg.created_at).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
       </span>
     </div>
