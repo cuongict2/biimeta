@@ -255,9 +255,9 @@ export default function AutoRunner() {
   const LOG_COLOR: Record<string, string> = { white: "#fff", success: "#2ecc71", danger: "#ff4757", warning: "#f39c12" };
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr", gap: 12 }}>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
       {/* Col 1: Cấu hình */}
-      <div style={S.card}>
+      <div style={S.card} className="col-span-1 lg:col-span-3">
         <div style={{ ...S.sectionTitle, color: "#3793ff" }}>1. Cấu hình</div>
         <textarea
           style={{ ...S.input, height: 90, resize: "vertical", fontFamily: "monospace", fontSize: 11, marginBottom: 8 }}
@@ -290,7 +290,7 @@ export default function AutoRunner() {
       </div>
 
       {/* Col 2: Tiến trình */}
-      <div style={S.card}>
+      <div style={S.card} className="col-span-1 lg:col-span-6">
         <div style={{ ...S.sectionTitle, textAlign: "center" }}>2. Tiến trình thực thi</div>
         <div style={{ overflowY: "auto", maxHeight: 600 }}>
           <table style={S.table}>
@@ -321,7 +321,7 @@ export default function AutoRunner() {
       </div>
 
       {/* Col 3: Kết quả */}
-      <div style={S.card}>
+      <div style={S.card} className="col-span-1 lg:col-span-3">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
           <div style={{ ...S.sectionTitle, color: "#2ecc71", marginBottom: 0 }}>3. Kết quả</div>
           <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: "#888", cursor: "pointer" }}>

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { supabase } from '@/lib/supabase'; // 1. Import Supabase client
 import ProductList from '@/app/components/ProductList';
 
@@ -58,53 +58,44 @@ export default async function Home() {
         </p>
       </section>
 
-          <section style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#e0e0e0' }}>My Project</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
-          <Link
-            href="/9router_config"
-            target="_blank"
-            style={{
-              padding: '25px',
-            backgroundColor: '#25252a',
-            border: '1px solid #333',
-              borderRadius: '12px',
-              textDecoration: 'none',
-            color: '#007bff',
-            fontWeight: '600',
-              fontSize: '1.2rem',
-              textAlign: 'center',
-              transition: '0.3s'
-          }}
-        >
-            🚀 9Router Config Generator
-        </Link>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
-          <Link
-            href="/coffee"
-            target="_blank"
-            style={{
-              padding: '25px',
-            backgroundColor: '#25252a',
-            border: '1px solid #333',
-              borderRadius: '12px',
-              textDecoration: 'none',
-            color: '#007bff',
-            fontWeight: '600',
-              fontSize: '1.2rem',
-              textAlign: 'center',
-              transition: '0.3s'
-          }}
-        >
-          Coffee Management System
-        </Link>
-      </div>
-
-
-      </section>
+      <section style={{ maxWidth: '800px', margin: '0 auto' }}>
+  <h2 style={{ textAlign: 'center', marginBottom: '30px', color: '#e0e0e0' }}>My Projects</h2>
+  
+  {/* Container bọc danh sách */}
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+    
+    {[
+      { href: "/9router_config", icon: "🚀", name: "9Router Config Generator" },
+      { href: "/coffee", icon: "☕", name: "Coffee Management System" },
+      { href: "/fb_verify", icon: "🛡️", name: "Facebook Verify Tool" }
+    ].map((project, index) => (
+      <Link
+        key={index}
+        href={project.href}
+        target="_blank"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '20px',
+          backgroundColor: '#25252a',
+          border: '1px solid #333', // Kẻ bảng
+          borderRadius: '12px',
+          textDecoration: 'none',
+          color: '#007bff',
+          fontWeight: '500',
+          fontSize: '1.1rem',
+          transition: '0.3s',
+        }}
+        // Thêm hiệu ứng hover bằng cách sử dụng thuộc tính onMouseOver/onMouseOut 
+        // hoặc đơn giản là để CSS xử lý nếu bạn có file CSS riêng.
+      >
+        <span style={{ marginRight: '15px', fontSize: '1.5rem' }}>{project.icon}</span>
+        {project.name}
+      </Link>
+    ))}
+    
+  </div>
+</section>
     </main>
   );
 }
-
