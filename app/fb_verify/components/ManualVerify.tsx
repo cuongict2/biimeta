@@ -184,9 +184,11 @@ export default function ManualVerify() {
       const res = await fetch(`/fb_verify/api/verify-otp?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}&otp=${otp}&proxy=${encodeURIComponent(proxy)}`);
       const data = await res.json();
       if (data?.error) {
-        const sub = Number(data.error.error_subcode), code = Number(data.error.code);
+        const sub = Number(data.error.error_subcode || 0);
+        const code = Number(data.error.code || 0);
+        const errMsg = data.error.message || JSON.stringify(data.error);
         if (sub === 490 || code === 490) addLog("Checkpoint (282) - Bị chặn!", true);
-        else addLog(`Lỗi ${code}: ${data.error.message}`, true);
+        else addLog("Lỗi " + (code || "API") + ": " + errMsg, true);
       } else if (data?.result === true || data?.status === "success") {
         addLog("XÁC THỰC THÀNH CÔNG!");
       } else addLog("" + JSON.stringify(data, null, 2));

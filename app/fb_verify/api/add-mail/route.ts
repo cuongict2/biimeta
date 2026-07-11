@@ -1,20 +1,6 @@
-﻿import { NextRequest, NextResponse } from "next/server";
 
-const DEVICE_ID = "8edb19ab-b150-45ce-a98f-4ee5f15-MSYS";
-const FAMILY_DEVICE_ID = "8edb19ab-b150-45ce-a98f-4ee5f15f7cbe";
-const UA = "Dalvik/2.1.0 (Linux; U; Android 10; SM-G930S Build/QQ3A.200805.001) [FBAN/EMA;FBBV/724844624;FBAV/457.0.0.0.52;FBDV/SM-G930S;FBSV/10;FBCX/msys;FBDM/{density=3.5}]";
-
-async function warmup(token: string) {
-  try {
-    await fetch(`https://graph.facebook.com/me?access_token=${token}`, {
-      headers: { "User-Agent": UA },
-    });
-  } catch {}
-}
-
-function sleep(ms: number) {
-  return new Promise((r) => setTimeout(r, ms));
-}
+import { NextRequest, NextResponse } from "next/server";
+import { generateFingerprint, buildFBHeaders, normalizeContactpoint, fbPost, fbGet } from "../fb-helpers";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -25,42 +11,60 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing token/email" }, { status: 400 });
   }
 
-  // Warmup
-  await warmup(token);
-  await sleep(3000 + Math.random() * 4000);
+  const fp = generateFingerprint(token);
 
-  const type = email.includes("@") ? "EMAIL" : "PHONE";
+  // Warmup
+  const warmupHeaders = buildFBHeaders(fp, token);
+  try {
+    await fbGet(`https://graph.facebook.com/me?fields=id,name&access_token=${token}`, warmupHeaders);
+  } catch {}
+  await new Promise((r) => setTimeout(r, 2000 + Math.random() * 3000));
+
+  const { value: contactpoint, type } = normalizeContactpoint(email);
+  const headers = buildFBHeaders(fp);
+  delete headers["Authorization"];
+  headers["X-FB-Friendly-Name"] = "editRegistrationContactpoint";
 
   const body = new URLSearchParams({
-    add_contactpoint: email,
+    add_contactpoint: contactpoint,
     add_contactpoint_type: type,
-    device_id: DEVICE_ID,
-    family_device_id: FAMILY_DEVICE_ID,
+    device_id: fp.deviceId,
+    family_device_id: fp.familyDeviceId,
     locale: "vi_VN",
     client_country_code: "VN",
     access_token: token,
+    format: "json",
+    fb_api_req_friendly_name: "editRegistrationContactpoint",
+    fb_api_caller_class: "EditContactPointDialogFragment",
   });
 
   try {
-    const res = await fetch("https://graph.facebook.com/me/edit_registration_contactpoint", {
-      method: "POST",
-      headers: {
-        "User-Agent": UA,
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "*/*",
-        Connection: "keep-alive",
-      },
-      body: body.toString(),
-    });
+    const res = await fbPost("/me/edit_registration_contactpoint", headers, body.toString());
+    console.log("[add-mail] Status:", res.status, "Headers:", JSON.stringify(res.headers));
 
-    const text = await res.text();
-    if (!text) {
-      return NextResponse.json({ error: { message: "Empty response from Facebook (proxy died?)" } });
+    // Neu Facebook yeu cau checkpoint (Integrity required)
+    if (res.headers["x-fb-integrity-required"] === "checkpoint" || res.headers["x-fb-integrity-session-id"]) {
+      return NextResponse.json({
+        error: {
+          message: "The user is enrolled in a blocking, logged-in checkpoint",
+          code: 190,
+          error_subcode: 490,
+          type: "OAuthException"
+        }
+      });
     }
-    const data = JSON.parse(text);
-    return NextResponse.json(data);
+
+    if (!res.body || res.body.trim().length === 0) {
+      return NextResponse.json({ error: { message: "Empty response from Facebook (possibly checkpoint)", code: 190, error_subcode: 490 } });
+    }
+
+    try {
+      return NextResponse.json(JSON.parse(res.body));
+    } catch {
+      return NextResponse.json({ error: { message: "Invalid JSON: " + res.body.substring(0, 200) } });
+    }
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({ error: { message: "Fetch error: " + msg } }, { status: 500 });
+    return NextResponse.json({ error: { message: "Request error: " + msg } }, { status: 500 });
   }
 }

@@ -178,9 +178,9 @@ export default function AutoRunner() {
     const vData = await vRes.json();
 
     if (vData?.error) {
-      const sub = Number(vData.error.error_subcode), code = Number(vData.error.code);
+      const sub = Number(vData.error.error_subcode || 0); const code = Number(vData.error.code || 0);
       if (sub === 490 || code === 490) updateRow({ id: rowId, stt: cStt, icon: "🛡️", uid, email, status: "🛡️ Checkpoint (282)", type: "danger", time: getTimer(startTime) });
-      else updateRow({ id: rowId, stt: cStt, icon: "❌", uid, email, status: `Lỗi ${code}: ${vData.error.message}`, type: "danger", time: getTimer(startTime) });
+      else updateRow({ id: rowId, stt: cStt, icon: "❌", uid, email, status: `Lỗi ${code || "API"}: ${vData.error.message || "Unknown"}`, type: "danger", time: getTimer(startTime) });
     }
     if (vData?.result === true || vData?.status === "success")
       updateRow({ id: rowId, stt: cStt, icon: "✅", uid, email, status: "Xác thực thành công! Check live...", type: "success", time: getTimer(startTime) });
