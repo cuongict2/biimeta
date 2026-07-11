@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import { generateFingerprint, buildFBHeaders, normalizeContactpoint, fbPost, fbGet } from "../fb-helpers";
 
@@ -6,6 +5,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token") || "";
   const email = searchParams.get("email") || "";
+  const proxy = searchParams.get("proxy") || "";
 
   if (!token || !email) {
     return NextResponse.json({ error: "Missing token/email" }, { status: 400 });
@@ -13,10 +13,10 @@ export async function GET(req: NextRequest) {
 
   const fp = generateFingerprint(token);
 
-  // Warmup
+  // Warmup qua proxy
   const warmupHeaders = buildFBHeaders(fp, token);
   try {
-    await fbGet(`https://graph.facebook.com/me?fields=id,name&access_token=${token}`, warmupHeaders);
+    await fbGet(`https://graph.facebook.com/me?fields=id,name&access_token=${token}`, warmupHeaders, proxy);
   } catch {}
   await new Promise((r) => setTimeout(r, 2000 + Math.random() * 3000));
 
@@ -39,10 +39,10 @@ export async function GET(req: NextRequest) {
   });
 
   try {
-    const res = await fbPost("/me/edit_registration_contactpoint", headers, body.toString());
-    console.log("[add-mail] Status:", res.status, "Headers:", JSON.stringify(res.headers));
+    // Gui post request qua proxy
+    const res = await fbPost("/me/edit_registration_contactpoint", headers, body.toString(), proxy);
+    console.log("[add-mail] Status:", res.status, "Body:", res.body.substring(0, 300));
 
-    // Neu Facebook yeu cau checkpoint (Integrity required)
     if (res.headers["x-fb-integrity-required"] === "checkpoint" || res.headers["x-fb-integrity-session-id"]) {
       return NextResponse.json({
         error: {

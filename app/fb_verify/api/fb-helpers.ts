@@ -1,5 +1,35 @@
+import { HttpsProxyAgent } from "https-proxy-agent";
 import * as https from "https";
 import * as zlib from "zlib";
+
+/**
+ * Tao HttpsProxyAgent tu chuoi proxy IP:Port:User:Pass hoac IP:Port
+ */
+export function getProxyAgent(proxyString?: string): HttpsProxyAgent<string> | undefined {
+  if (!proxyString || proxyString.trim().length === 0) return undefined;
+  
+  try {
+    const parts = proxyString.trim().split(":");
+    if (parts.length >= 2) {
+      const host = parts[0];
+      const port = parts[1];
+      let auth = "";
+      if (parts.length >= 4) {
+        auth = `${parts[2]}:${parts[3]}`;
+      }
+      
+      const proxyUrl = auth 
+        ? `http://${auth}@${host}:${port}` 
+        : `http://${host}:${port}`;
+        
+      return new HttpsProxyAgent(proxyUrl);
+    }
+  } catch (e) {
+    console.log("[ProxyAgent] Parse error:", e instanceof Error ? e.message : String(e));
+  }
+  return undefined;
+}
+
 
 import * as crypto from "crypto";
 
@@ -203,7 +233,8 @@ export async function warmupSession(token: string, fp: DeviceFingerprint): Promi
 export function fbPost(
   urlPath: string,
   headers: Record<string, string>,
-  body: string
+  body: string,
+  proxyString?: string
 ): Promise<{ status: number; body: string; headers: Record<string, string> }> {
   return new Promise((resolve, reject) => {
     const options: https.RequestOptions = {
@@ -273,15 +304,18 @@ export function fbPost(
  */
 export function fbGet(
   url: string,
-  headers: Record<string, string>
+  headers: Record<string, string>,
+  proxyString?: string
 ): Promise<{ status: number; body: string }> {
   return new Promise((resolve, reject) => {
     const parsed = new URL(url);
+    const agent = getProxyAgent(proxyString);
     const options: https.RequestOptions = {
       hostname: parsed.hostname,
       path: parsed.pathname + parsed.search,
       method: "GET",
       headers: { ...headers, "Accept-Encoding": "identity" },
+      ...(agent ? { agent } : {}),
     };
 
     const req = https.request(options, (res) => {

@@ -18,6 +18,8 @@ const S: Record<string, React.CSSProperties> = {
   btnBuyAcc: { background: "rgba(147,51,234,0.15)", color: "#a855f7", border: "1px solid rgba(147,51,234,0.3)", borderRadius: 8, padding: "10px 0", fontWeight: 600, fontSize: 13, cursor: "pointer", width: "100%" },
   btnPrimary: { background: "#3793ff", color: "#fff", border: "none", borderRadius: 10, padding: "14px 0", fontWeight: 700, fontSize: 14, cursor: "pointer", width: "100%", transition: "opacity 0.2s" },
   btnSuccess: { background: "#2ecc71", color: "#fff", border: "none", borderRadius: 10, padding: "14px 0", fontWeight: 700, fontSize: 14, cursor: "pointer", width: "100%", transition: "opacity 0.2s" },
+  btnResend: { background: "rgba(55,147,255,0.15)", color: "#3793ff", border: "1px solid rgba(55,147,255,0.3)", borderRadius: 8, padding: "10px 0", fontWeight: 600, fontSize: 13, cursor: "pointer", width: "100%" },
+  btnDanger: { background: "#ff4757", color: "#fff", border: "none", borderRadius: 10, padding: "14px 0", fontWeight: 700, fontSize: 14, cursor: "pointer", width: "100%", transition: "opacity 0.2s" },
   btnPaste: { background: "#dc3545", color: "#fff", border: "none", borderRadius: 8, padding: "7px 16px", fontWeight: 600, fontSize: 13, cursor: "pointer" },
   btnPasteAcc: { background: "rgba(147,51,234,0.8)", color: "#fff", border: "none", borderRadius: 8, padding: "7px 16px", fontWeight: 600, fontSize: 13, cursor: "pointer" },
   tabActive: { background: "#3793ff", color: "#fff", border: "none", borderRadius: 8, padding: "10px 0", fontWeight: 700, fontSize: 13, cursor: "pointer", flex: 1, transition: "all 0.2s" },
@@ -48,6 +50,8 @@ export default function ManualVerify() {
   const [loadingStep1, setLoadingStep1] = useState(false);
   const [loadingStep2, setLoadingStep2] = useState(false);
   const [loadingBuyAcc, setLoadingBuyAcc] = useState(false);
+  const [loadingResend, setLoadingResend] = useState(false);
+  const [loadingRemove, setLoadingRemove] = useState(false);
 
   const hotmailRef = useRef({ refresh: "", client: "" });
   const tabId = useRef("manual_" + Math.random().toString(36).substring(2, 8));
@@ -160,19 +164,91 @@ export default function ManualVerify() {
     setLoadingOtp(false);
   }
 
-  async function handleAddMail(e: React.FormEvent) {
+    async function handleAddMail(e: React.FormEvent) {
     e.preventDefault();
     if (!token || !email) { addLog("Thiếu Token hoặc Email!", true); return; }
     setLoadingStep1(true);
-    addLog(`Đang add mail: ${email}...`);
+    addLog(`Đang add liên hệ: ${email}...`);
     try {
       const res = await fetch(`/fb_verify/api/add-mail?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}&proxy=${encodeURIComponent(proxy)}`);
       const data = await res.json();
-      if (data?.error) addLog(`Lỗi: ${data.error.message || JSON.stringify(data.error)}`, true);
-      else if (data?.result === true) { addLog("Add mail thành công! Chuyển bước 2..."); setStep("step2"); }
-      else addLog("Phan hoi: " + JSON.stringify(data, null, 2));
-    } catch (e) { addLog("" + (e instanceof Error ? e.message : String(e)), true); }
+      
+      if (data?.error) {
+        const errCode = Number(data.error.code || 0);
+        const subCode = Number(data.error.error_subcode || 0);
+        const errMsg = String(data.error.message || "").toLowerCase();
+        
+        // Neu la loi abuse (368) hoac loi gui tin nhan (1404009) -> van cho qua buoc 2
+        if (errCode === 368 || subCode === 1404009 || errMsg.includes("abusive") || errMsg.includes("disallowed")) {
+          addLog("⚠️ Lỗi bảo mật Sentry (Abusive) từ Facebook, nhưng mã xác nhận có thể vẫn đã được gửi đi!", false);
+          addLog("👉 Chuyển sang Bước 2 để thử nhập OTP...");
+          setStep("step2");
+        } else {
+          addLog(`❌ Lỗi: ${data.error.message || JSON.stringify(data.error)}`, true);
+        }
+      } else if (data?.result === true) {
+        addLog("✅ Gửi yêu cầu thêm liên hệ thành công! Chuyển sang bước 2...");
+        setStep("step2");
+      } else {
+        addLog("Phản hồi: " + JSON.stringify(data, null, 2));
+      }
+    } catch (e) {
+      addLog("❌ Lỗi kết nối: " + (e instanceof Error ? e.message : String(e)), true);
+    }
     setLoadingStep1(false);
+  }
+
+
+
+  async function handleRemoveMail() {
+    if (!token || !email) { addLog("Thiếu Token hoặc Email/Phone để xóa!", true); return; }
+    const confirmDelete = window.confirm("Bạn có chắc muốn XÓA liên hệ này khỏi tài khoản?");
+    if (!confirmDelete) return;
+    
+    setLoadingRemove(true);
+    addLog(`⏳ Đang xóa liên hệ: ${email}...`);
+    try {
+      const res = await fetch(
+        `/fb_verify/api/remove-mail?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}&proxy=${encodeURIComponent(proxy)}`
+      );
+      const data = await res.json();
+      if (data?.error) {
+        addLog(`❌ Xóa liên hệ lỗi: ${data.error.message || JSON.stringify(data.error)}`, true);
+      } else {
+        addLog(`✅ Đã xóa liên hệ: ${email} thành công!`);
+      }
+    } catch (e) {
+      addLog("❌ Lỗi: " + (e instanceof Error ? e.message : String(e)), true);
+    }
+    setLoadingRemove(false);
+  }
+
+    async function handleResendOtp() {
+    if (!token || !email) { addLog("Thiếu Token hoặc Email!", true); return; }
+    setLoadingResend(true);
+    addLog("⏳ Yêu cầu gửi lại OTP tới Facebook...");
+    try {
+      const res = await fetch(
+        `/fb_verify/api/resend-otp?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}&proxy=${encodeURIComponent(proxy)}`
+      );
+      const data = await res.json();
+      if (data?.error) {
+        const errCode = Number(data.error.code || 0);
+        const subCode = Number(data.error.error_subcode || 0);
+        const errMsg = String(data.error.message || "").toLowerCase();
+        
+        if (errCode === 368 || subCode === 1404009 || errMsg.includes("abusive") || errMsg.includes("disallowed")) {
+          addLog("⚠️ Lỗi bảo mật Sentry (Abusive) từ Facebook, nhưng mã OTP gửi lại có thể vẫn đang được chuyển đi!", false);
+        } else {
+          addLog(`❌ Gửi lại OTP lỗi: ${data.error.message || JSON.stringify(data.error)}`, true);
+        }
+      } else {
+        addLog("✅ Facebook thông báo đã gửi lại OTP thành công!");
+      }
+    } catch (e) { 
+      addLog("❌ Lỗi: " + (e instanceof Error ? e.message : String(e)), true); 
+    }
+    setLoadingResend(false);
   }
 
   async function handleVerifyOtp(e: React.FormEvent) {
@@ -301,9 +377,14 @@ export default function ManualVerify() {
               <label style={S.label}>Proxy</label>
               <input type="text" style={S.input} value={proxy} onChange={(e) => setProxy(e.target.value)} placeholder="IP:Port:User:Pass" />
             </div>
-            <button type="submit" style={{ ...S.btnPrimary, opacity: loadingStep1 ? 0.6 : 1 }} disabled={loadingStep1}>
-              {loadingStep1 ? "ĐANG GỬI..." : "GỬI YÊU CẦU THÊM MAIL"}
-            </button>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <button type="submit" style={{ ...S.btnPrimary, opacity: loadingStep1 ? 0.6 : 1 }} disabled={loadingStep1}>
+                {loadingStep1 ? "⌛ Đang gửi..." : "➕ Thêm liên hệ"}
+              </button>
+              <button type="button" style={{ ...S.btnDanger, opacity: loadingRemove ? 0.6 : 1 }} onClick={handleRemoveMail} disabled={loadingRemove}>
+                {loadingRemove ? "⌛ Đang xóa..." : "❌ Xóa liên hệ"}
+              </button>
+            </div>
           </form>
         )}
 
@@ -320,9 +401,14 @@ export default function ManualVerify() {
               <label style={S.label}>Proxy</label>
               <input type="text" style={S.input} value={proxy} onChange={(e) => setProxy(e.target.value)} placeholder="IP:Port:User:Pass" />
             </div>
-            <button type="submit" style={{ ...S.btnSuccess, opacity: loadingStep2 ? 0.6 : 1 }} disabled={loadingStep2}>
-              {loadingStep2 ? "ĐANG XÁC NHẬN..." : "XÁC NHẬN OTP NGAY"}
-            </button>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <button type="button" style={{ ...S.btnResend, opacity: loadingResend ? 0.6 : 1 }} onClick={handleResendOtp} disabled={loadingResend}>
+                {loadingResend ? "⌛ Đang gửi..." : "🔄 Gửi lại OTP FB"}
+              </button>
+              <button type="submit" style={{ ...S.btnSuccess, opacity: loadingStep2 ? 0.6 : 1 }} disabled={loadingStep2}>
+                {loadingStep2 ? "⌛ Đang xác nhận..." : "✅ Xác nhận OTP"}
+              </button>
+            </div>
           </form>
         )}
 

@@ -19,7 +19,7 @@ const S: Record<string, React.CSSProperties> = {
   btnPrimary: { background: "#3793ff", color: "#fff", border: "none", borderRadius: 8, padding: "9px 0", fontWeight: 700, fontSize: 13, cursor: "pointer", width: "100%" },
   btnDanger: { background: "transparent", color: "#ff4757", border: "1px solid #ff4757", borderRadius: 8, padding: "9px 0", fontWeight: 700, fontSize: 13, cursor: "pointer", width: "100%" },
   btnSuccess: { background: "#2ecc71", color: "#fff", border: "none", borderRadius: 8, padding: "9px 0", fontWeight: 700, fontSize: 13, cursor: "pointer", width: "100%" },
-  logBox: { height: 180, overflowY: "auto" as const, background: "#000", fontFamily: "monospace", fontSize: 11, padding: 10, borderRadius: 10, border: "1px solid #333", color: "#fff" },
+  logBox: { height: 100, overflowY: "auto" as const, background: "#000", fontFamily: "monospace", fontSize: 11, padding: 10, borderRadius: 10, border: "1px solid #333", color: "#fff" },
   table: { width: "100%", borderCollapse: "collapse" as const, fontSize: 12 },
   th: { padding: "6px 8px", textAlign: "left" as const, color: "#555", borderBottom: "1px solid #2f333d", fontWeight: 600 },
   td: { padding: "5px 8px", borderBottom: "1px solid #1e212c" },
@@ -292,7 +292,7 @@ export default function AutoRunner() {
       {/* Col 2: Tiến trình */}
       <div style={S.card} className="col-span-1 lg:col-span-6">
         <div style={{ ...S.sectionTitle, textAlign: "center" }}>2. Tiến trình thực thi</div>
-        <div style={{ overflowY: "auto", maxHeight: 600 }}>
+        <div style={{ overflowY: "auto", maxHeight: 300 }}>
           <table style={S.table}>
             <thead>
               <tr>
@@ -329,7 +329,7 @@ export default function AutoRunner() {
             Auto Upload BiiMeta
           </label>
         </div>
-        <textarea style={{ ...S.resultBox, height: 480 }} readOnly value={finalResult} />
+        <textarea style={{ ...S.resultBox, height: 240 }} readOnly value={finalResult} />
         <button style={{ ...S.btnSuccess, marginTop: 8 }} onClick={() => navigator.clipboard.writeText(finalResult).catch(() => {})}>📋 COPY</button>
       </div>
     </div>
