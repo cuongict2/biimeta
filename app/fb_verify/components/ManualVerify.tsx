@@ -393,9 +393,12 @@ export default function ManualVerify() {
           <form onSubmit={handleVerifyOtp} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ textAlign: "center" }}>
               <label style={{ ...S.label, textAlign: "center", display: "block", marginBottom: 8 }}>Mã xác thực OTP</label>
-              <input type="text" required
+              <input type="tel" required
                 style={{ ...S.input, textAlign: "center", fontSize: 28, fontWeight: 700, color: "#2ecc71", letterSpacing: 12, padding: "12px 0" }}
-                value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="------" maxLength={8} />
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                placeholder="------"
+                maxLength={8} />
             </div>
             <div>
               <label style={S.label}>Proxy</label>
