@@ -4,11 +4,11 @@
     "maxPlayers": 8,
     "selectedPlayerIds": [
       "P-1787578417257-m4fvm",
-      "P-1787578493634-1s1tq",
       "P-1787578475306-s8njq",
+      "P-1787578493634-1s1tq",
       "P-1787578732005-vdmta"
     ],
-    "createdAt": "2026-08-24T14:17:30.295Z",
+    "createdAt": "2026-08-24T14:44:31.556Z",
     "status": "GROUP_STAGE"
   },
   "players": [
@@ -51,10 +51,25 @@
   ],
   "matches": [
     {
-      "id": "GRP-R1-MD1-P-1787578732005-vdmta-vs-P-1787578475306-s8njq",
+      "id": "GRP-R1-MD1-P-1787578732005-vdmta-vs-P-1787578493634-1s1tq",
       "phase": "GROUP",
       "round": 1,
       "homePlayerId": "P-1787578732005-vdmta",
+      "awayPlayerId": "P-1787578493634-1s1tq",
+      "games": [],
+      "homeScore": 0,
+      "awayScore": 0,
+      "homePoints": 0,
+      "awayPoints": 0,
+      "winnerId": null,
+      "status": "PENDING",
+      "matchDay": 1
+    },
+    {
+      "id": "GRP-R1-MD1-P-1787578417257-m4fvm-vs-P-1787578475306-s8njq",
+      "phase": "GROUP",
+      "round": 1,
+      "homePlayerId": "P-1787578417257-m4fvm",
       "awayPlayerId": "P-1787578475306-s8njq",
       "games": [],
       "homeScore": 0,
@@ -66,48 +81,11 @@
       "matchDay": 1
     },
     {
-      "id": "GRP-R1-MD1-P-1787578417257-m4fvm-vs-P-1787578493634-1s1tq",
-      "phase": "GROUP",
-      "round": 1,
-      "homePlayerId": "P-1787578417257-m4fvm",
-      "awayPlayerId": "P-1787578493634-1s1tq",
-      "games": [
-        {
-          "scoreHome": 1,
-          "scoreAway": 1,
-          "goalsHome": 1,
-          "goalsAway": 1,
-          "winner": "draw"
-        },
-        {
-          "scoreHome": 3,
-          "scoreAway": 0,
-          "goalsHome": 3,
-          "goalsAway": 0,
-          "winner": "home"
-        },
-        {
-          "scoreHome": 0,
-          "scoreAway": 0,
-          "goalsHome": 0,
-          "goalsAway": 0,
-          "winner": "draw"
-        }
-      ],
-      "homeScore": 1,
-      "awayScore": 0,
-      "homePoints": 3,
-      "awayPoints": 0,
-      "winnerId": "P-1787578417257-m4fvm",
-      "status": "COMPLETED",
-      "matchDay": 1
-    },
-    {
-      "id": "GRP-R1-MD2-P-1787578732005-vdmta-vs-P-1787578493634-1s1tq",
+      "id": "GRP-R1-MD2-P-1787578732005-vdmta-vs-P-1787578475306-s8njq",
       "phase": "GROUP",
       "round": 1,
       "homePlayerId": "P-1787578732005-vdmta",
-      "awayPlayerId": "P-1787578493634-1s1tq",
+      "awayPlayerId": "P-1787578475306-s8njq",
       "games": [],
       "homeScore": 0,
       "awayScore": 0,
@@ -118,10 +96,10 @@
       "matchDay": 2
     },
     {
-      "id": "GRP-R1-MD2-P-1787578475306-s8njq-vs-P-1787578417257-m4fvm",
+      "id": "GRP-R1-MD2-P-1787578493634-1s1tq-vs-P-1787578417257-m4fvm",
       "phase": "GROUP",
       "round": 1,
-      "homePlayerId": "P-1787578475306-s8njq",
+      "homePlayerId": "P-1787578493634-1s1tq",
       "awayPlayerId": "P-1787578417257-m4fvm",
       "games": [],
       "homeScore": 0,
@@ -148,11 +126,11 @@
       "matchDay": 3
     },
     {
-      "id": "GRP-R1-MD3-P-1787578493634-1s1tq-vs-P-1787578475306-s8njq",
+      "id": "GRP-R1-MD3-P-1787578475306-s8njq-vs-P-1787578493634-1s1tq",
       "phase": "GROUP",
       "round": 1,
-      "homePlayerId": "P-1787578493634-1s1tq",
-      "awayPlayerId": "P-1787578475306-s8njq",
+      "homePlayerId": "P-1787578475306-s8njq",
+      "awayPlayerId": "P-1787578493634-1s1tq",
       "games": [],
       "homeScore": 0,
       "awayScore": 0,
@@ -163,10 +141,10 @@
       "matchDay": 3
     },
     {
-      "id": "GRP-R2-MD4-P-1787578475306-s8njq-vs-P-1787578732005-vdmta",
+      "id": "GRP-R2-MD4-P-1787578493634-1s1tq-vs-P-1787578732005-vdmta",
       "phase": "GROUP",
       "round": 2,
-      "homePlayerId": "P-1787578475306-s8njq",
+      "homePlayerId": "P-1787578493634-1s1tq",
       "awayPlayerId": "P-1787578732005-vdmta",
       "games": [],
       "homeScore": 0,
@@ -178,10 +156,10 @@
       "matchDay": 4
     },
     {
-      "id": "GRP-R2-MD4-P-1787578493634-1s1tq-vs-P-1787578417257-m4fvm",
+      "id": "GRP-R2-MD4-P-1787578475306-s8njq-vs-P-1787578417257-m4fvm",
       "phase": "GROUP",
       "round": 2,
-      "homePlayerId": "P-1787578493634-1s1tq",
+      "homePlayerId": "P-1787578475306-s8njq",
       "awayPlayerId": "P-1787578417257-m4fvm",
       "games": [],
       "homeScore": 0,
@@ -193,10 +171,10 @@
       "matchDay": 4
     },
     {
-      "id": "GRP-R2-MD5-P-1787578493634-1s1tq-vs-P-1787578732005-vdmta",
+      "id": "GRP-R2-MD5-P-1787578475306-s8njq-vs-P-1787578732005-vdmta",
       "phase": "GROUP",
       "round": 2,
-      "homePlayerId": "P-1787578493634-1s1tq",
+      "homePlayerId": "P-1787578475306-s8njq",
       "awayPlayerId": "P-1787578732005-vdmta",
       "games": [],
       "homeScore": 0,
@@ -208,11 +186,11 @@
       "matchDay": 5
     },
     {
-      "id": "GRP-R2-MD5-P-1787578417257-m4fvm-vs-P-1787578475306-s8njq",
+      "id": "GRP-R2-MD5-P-1787578417257-m4fvm-vs-P-1787578493634-1s1tq",
       "phase": "GROUP",
       "round": 2,
       "homePlayerId": "P-1787578417257-m4fvm",
-      "awayPlayerId": "P-1787578475306-s8njq",
+      "awayPlayerId": "P-1787578493634-1s1tq",
       "games": [],
       "homeScore": 0,
       "awayScore": 0,
@@ -238,11 +216,11 @@
       "matchDay": 6
     },
     {
-      "id": "GRP-R2-MD6-P-1787578475306-s8njq-vs-P-1787578493634-1s1tq",
+      "id": "GRP-R2-MD6-P-1787578493634-1s1tq-vs-P-1787578475306-s8njq",
       "phase": "GROUP",
       "round": 2,
-      "homePlayerId": "P-1787578475306-s8njq",
-      "awayPlayerId": "P-1787578493634-1s1tq",
+      "homePlayerId": "P-1787578493634-1s1tq",
+      "awayPlayerId": "P-1787578475306-s8njq",
       "games": [],
       "homeScore": 0,
       "awayScore": 0,
@@ -286,18 +264,18 @@
   "standings": [
     {
       "playerId": "P-1787578417257-m4fvm",
-      "played": 1,
-      "won": 1,
+      "played": 0,
+      "won": 0,
       "drawn": 0,
       "lost": 0,
-      "gamesWon": 1,
+      "gamesWon": 0,
       "gamesLost": 0,
-      "gamesDraw": 2,
-      "gameDifference": 1,
-      "goalsFor": 4,
-      "goalsAgainst": 1,
-      "goalDifference": 3,
-      "points": 3,
+      "gamesDraw": 0,
+      "gameDifference": 0,
+      "goalsFor": 0,
+      "goalsAgainst": 0,
+      "goalDifference": 0,
+      "points": 0,
       "rank": 1
     },
     {
@@ -317,7 +295,7 @@
       "rank": 2
     },
     {
-      "playerId": "P-1787578732005-vdmta",
+      "playerId": "P-1787578493634-1s1tq",
       "played": 0,
       "won": 0,
       "drawn": 0,
@@ -333,18 +311,18 @@
       "rank": 3
     },
     {
-      "playerId": "P-1787578493634-1s1tq",
-      "played": 1,
+      "playerId": "P-1787578732005-vdmta",
+      "played": 0,
       "won": 0,
       "drawn": 0,
-      "lost": 1,
+      "lost": 0,
       "gamesWon": 0,
-      "gamesLost": 1,
-      "gamesDraw": 2,
-      "gameDifference": -1,
-      "goalsFor": 1,
-      "goalsAgainst": 4,
-      "goalDifference": -3,
+      "gamesLost": 0,
+      "gamesDraw": 0,
+      "gameDifference": 0,
+      "goalsFor": 0,
+      "goalsAgainst": 0,
+      "goalDifference": 0,
       "points": 0,
       "rank": 4
     }
