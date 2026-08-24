@@ -13,7 +13,7 @@ import { DEFAULT_TOURNAMENT_DATA } from "../../types";
 
 // GET - Lấy toàn bộ dữ liệu giải đấu
 export async function GET() {
-  const data = readTournamentData();
+  const data = await readTournamentData();
   return Response.json(data);
 }
 
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = readTournamentData();
+  const data = await readTournamentData();
 
   // Kiểm tra tất cả playerIds tồn tại
   const existingIds = new Set(data.players.map((p) => p.id));
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
   data.matches = [...groupMatches, ...finalsMatches];
   data.standings = standings;
 
-  writeTournamentData(data);
+  await writeTournamentData(data);
 
   return Response.json({
     success: true,
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
 
 // DELETE - Reset giải đấu
 export async function DELETE() {
-  const data = readTournamentData();
+  const data = await readTournamentData();
 
   // Giữ lại danh sách người chơi, chỉ reset giải
   const resetData = {
@@ -97,6 +97,6 @@ export async function DELETE() {
     players: data.players,
   };
 
-  writeTournamentData(resetData);
+  await writeTournamentData(resetData);
   return Response.json({ success: true, message: "Giải đấu đã được reset." });
 }

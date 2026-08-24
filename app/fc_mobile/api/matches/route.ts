@@ -14,7 +14,7 @@ import { GameResult } from "../../types";
 
 // GET - Lấy danh sách trận đấu
 export async function GET() {
-  const data = readTournamentData();
+  const data = await readTournamentData();
   return Response.json({ matches: data.matches });
 }
 
@@ -34,7 +34,7 @@ export async function PUT(req: NextRequest) {
   }
 
   // Tìm trận trước để lấy phase cho việc kiểm tra
-  let data = readTournamentData();
+  let data = await readTournamentData();
   const matchIndex = data.matches.findIndex((m) => m.id === matchId);
 
   if (matchIndex === -1) {
@@ -124,7 +124,7 @@ export async function PUT(req: NextRequest) {
     data.config.status = "COMPLETED";
   }
 
-  writeTournamentData(data);
+  await writeTournamentData(data);
 
   return Response.json({
     success: true,

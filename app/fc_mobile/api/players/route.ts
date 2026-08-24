@@ -8,7 +8,7 @@ import { Player } from "../../types";
 
 // GET - Lấy danh sách người chơi
 export async function GET() {
-  const data = readTournamentData();
+  const data = await readTournamentData();
   return Response.json({ players: data.players });
 }
 
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const data = readTournamentData();
+  const data = await readTournamentData();
 
   const newPlayer: Player = {
     id: `P-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
   };
 
   data.players.push(newPlayer);
-  writeTournamentData(data);
+  await writeTournamentData(data);
 
   return Response.json({ player: newPlayer }, { status: 201 });
 }
@@ -51,7 +51,7 @@ export async function PUT(req: NextRequest) {
     return Response.json({ error: "ID là bắt buộc." }, { status: 400 });
   }
 
-  const data = readTournamentData();
+  const data = await readTournamentData();
   const index = data.players.findIndex((p) => p.id === id);
 
   if (index === -1) {
@@ -70,7 +70,7 @@ export async function PUT(req: NextRequest) {
     avatarUrl: avatarUrl ?? data.players[index].avatarUrl,
   };
 
-  writeTournamentData(data);
+  await writeTournamentData(data);
   return Response.json({ player: data.players[index] });
 }
 
@@ -83,7 +83,7 @@ export async function DELETE(req: NextRequest) {
     return Response.json({ error: "ID là bắt buộc." }, { status: 400 });
   }
 
-  const data = readTournamentData();
+  const data = await readTournamentData();
 
   // Kiểm tra nếu giải đấu đang diễn ra và player đang tham gia
   if (
@@ -101,6 +101,6 @@ export async function DELETE(req: NextRequest) {
     (pid) => pid !== id
   );
 
-  writeTournamentData(data);
+  await writeTournamentData(data);
   return Response.json({ success: true });
 }
