@@ -1,24 +1,24 @@
 /* ============================================================
-   FC MOBILE TOURNAMENT MANAGER - ESPORTS THEME
-   Tone: Black (#0a0e17), Gold (#d4af37), Emerald (#10b981)
+   FC MOBILE TOURNAMENT MANAGER - ESPORTS THEME (OPTIMIZED)
+   Tone: Premium Dark Slate Blue & Champagne Gold
    ============================================================ */
 
 /* ---- BASE ---- */
 .fc-mobile-app {
-  --fc-black: #0a0e17;
-  --fc-dark: #111827;
-  --fc-card: #1a1f2e;
-  --fc-card-hover: #242a3d;
-  --fc-gold: #d4af37;
-  --fc-gold-light: #f0d060;
-  --fc-emerald: #10b981;
-  --fc-emerald-dark: #059669;
-  --fc-red: #ef4444;
-  --fc-blue: #3b82f6;
-  --fc-text: #e5e7eb;
-  --fc-text-muted: #9ca3af;
-  --fc-border: #2d3548;
-  --fc-gradient: linear-gradient(135deg, #d4af37 0%, #10b981 100%);
+  --fc-black: #0b0f19;
+  --fc-dark: #121824;
+  --fc-card: #1a2232;
+  --fc-card-hover: #222c40;
+  --fc-gold: #c5a85c;
+  --fc-gold-light: #dfc47b;
+  --fc-emerald: #0d9488;
+  --fc-emerald-dark: #0f766e;
+  --fc-red: #e11d48;
+  --fc-blue: #2563eb;
+  --fc-text: #f1f5f9;
+  --fc-text-muted: #94a3b8;
+  --fc-border: #263147;
+  --fc-gradient: linear-gradient(135deg, #c5a85c 0%, #0d9488 100%);
   font-family: var(--font-geist-sans), "Inter", system-ui, sans-serif;
 }
 
@@ -42,12 +42,12 @@
 /* ---- TABS ---- */
 .fc-tab {
   position: relative;
-  padding: 12px 24px;
+  padding: 10px 18px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--fc-text-muted);
-  transition: all 0.3s ease;
-  border-radius: 8px 8px 0 0;
+  transition: all 0.2s ease;
+  border-radius: 6px 6px 0 0;
   cursor: pointer;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -55,12 +55,12 @@
 
 .fc-tab:hover {
   color: var(--fc-gold-light);
-  background: rgba(212, 175, 55, 0.08);
+  background: rgba(197, 168, 92, 0.08);
 }
 
 .fc-tab-active {
   color: var(--fc-gold) !important;
-  background: rgba(212, 175, 55, 0.12);
+  background: rgba(197, 168, 92, 0.12);
 }
 
 .fc-tab-active::after {
@@ -69,9 +69,9 @@
   bottom: -2px;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 2px;
   background: var(--fc-gradient);
-  border-radius: 3px 3px 0 0;
+  border-radius: 2px 2px 0 0;
 }
 
 /* ---- CARDS ---- */
@@ -150,26 +150,26 @@
 
 /* ---- BUTTONS ---- */
 .fc-btn {
-  padding: 10px 24px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 8px;
-  font-weight: 700;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
 }
 
 .fc-btn-gold {
   background: var(--fc-gradient);
-  color: #000;
+  color: #0c101d;
 }
 
 .fc-btn-gold:hover {
-  opacity: 0.9;
+  opacity: 0.95;
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 12px rgba(197, 168, 92, 0.2);
 }
 
 .fc-btn-emerald {
@@ -180,7 +180,7 @@
 .fc-btn-emerald:hover {
   background: var(--fc-emerald-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
 }
 
 .fc-btn-red {
@@ -189,7 +189,7 @@
 }
 
 .fc-btn-red:hover {
-  opacity: 0.9;
+  opacity: 0.95;
   transform: translateY(-1px);
 }
 
@@ -202,6 +202,7 @@
 .fc-btn-outline:hover {
   border-color: var(--fc-gold);
   color: var(--fc-gold);
+  background: rgba(197, 168, 92, 0.05);
 }
 
 /* ---- TABLE ---- */
@@ -246,42 +247,42 @@
 .fc-match-card {
   background: var(--fc-card);
   border: 1px solid var(--fc-border);
-  border-radius: 12px;
-  padding: 16px 20px;
+  border-radius: 8px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: all 0.3s ease;
-  gap: 12px;
+  transition: all 0.2s ease;
+  gap: 8px;
 }
 
 .fc-match-card:hover {
-  border-color: rgba(212, 175, 55, 0.3);
+  border-color: rgba(197, 168, 92, 0.3);
 }
 
 .fc-match-card.completed {
-  border-left: 4px solid var(--fc-emerald);
+  border-left: 3px solid var(--fc-emerald);
 }
 
 .fc-match-card.pending {
-  border-left: 4px solid var(--fc-text-muted);
+  border-left: 3px solid var(--fc-text-muted);
 }
 
 .fc-match-card.finals {
-  border: 2px solid var(--fc-gold);
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(26, 31, 46, 1) 100%);
+  border: 1.5px solid var(--fc-gold);
+  background: linear-gradient(135deg, rgba(197, 168, 92, 0.08) 0%, rgba(26, 31, 46, 1) 100%);
 }
 
 .fc-match-score {
-  font-size: 1.8rem;
-  font-weight: 800;
-  min-width: 50px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  min-width: 45px;
   text-align: center;
 }
 
 .fc-match-vs {
   color: var(--fc-text-muted);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -289,60 +290,60 @@
 .fc-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(4px);
+  background: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(5px);
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 12px;
 }
 
 .fc-modal {
   background: var(--fc-dark);
-  border: 1px solid var(--fc-gold);
-  border-radius: 16px;
-  padding: 32px;
-  max-width: 600px;
+  border: 1px solid var(--fc-border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 500px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
 .fc-modal h3 {
   color: var(--fc-gold);
-  font-size: 1.4rem;
-  margin-bottom: 20px;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
   text-align: center;
+  font-weight: 700;
 }
 
 /* ---- INPUTS ---- */
 .fc-input {
   width: 100%;
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: var(--fc-black);
   border: 1px solid var(--fc-border);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--fc-text);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   transition: border-color 0.2s;
   outline: none;
 }
 
 .fc-input:focus {
   border-color: var(--fc-gold);
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
 }
 
 .fc-select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: var(--fc-black);
   border: 1px solid var(--fc-border);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--fc-text);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   cursor: pointer;
   outline: none;
 }
@@ -353,10 +354,10 @@
 
 .fc-label {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--fc-text-muted);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -364,45 +365,45 @@
 /* ---- BADGE / STATUS ---- */
 .fc-badge {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .fc-badge-pending {
-  background: rgba(156, 163, 175, 0.2);
+  background: rgba(148, 163, 184, 0.15);
   color: var(--fc-text-muted);
 }
 
 .fc-badge-completed {
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(13, 148, 136, 0.15);
   color: var(--fc-emerald);
 }
 
 .fc-badge-finals {
-  background: rgba(212, 175, 55, 0.2);
+  background: rgba(197, 168, 92, 0.15);
   color: var(--fc-gold);
 }
 
 /* ---- CHECKBOX CUSTOM ---- */
 .fc-checkbox {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   accent-color: var(--fc-gold);
   cursor: pointer;
 }
 
 /* ---- ANIMATIONS ---- */
 @keyframes fc-fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .fc-animate-in {
-  animation: fc-fadeIn 0.4s ease forwards;
+  animation: fc-fadeIn 0.3s ease forwards;
 }
 
 @keyframes fc-pulse {
@@ -414,33 +415,55 @@
   animation: fc-pulse 2s ease-in-out infinite;
 }
 
-/* ---- RESPONSIVE ---- */
+/* ---- RESPONSIVE MOBILE OPTIMIZATION ---- */
 @media (max-width: 768px) {
   .fc-tab {
-    padding: 8px 14px;
-    font-size: 0.8rem;
+    padding: 8px 12px;
+    font-size: 0.75rem;
   }
 
   .fc-match-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 8px;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  /* Giữ các cột tên cầu thủ thẳng hàng ngang thay vì dọc */
+  .fc-match-card > div {
+    font-size: 0.8rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .fc-match-score {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
+    min-width: 36px;
   }
 
   .fc-modal {
-    padding: 20px;
+    padding: 16px;
+    border-radius: 8px;
   }
 
   .fc-player-card {
-    padding: 14px;
+    padding: 12px;
+    border-radius: 12px;
   }
 
   .fc-card {
-    padding: 16px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .fc-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  
+  /* Giúp bảng không bị vỡ và nhỏ gọn */
+  .fc-table tbody td, .fc-table thead th {
+    padding: 8px 6px;
+    font-size: 0.7rem;
   }
 }
 
