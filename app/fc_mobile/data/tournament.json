@@ -1,0 +1,49 @@
+{
+  "config": {
+    "legs": 1,
+    "maxPlayers": 8,
+    "selectedPlayerIds": [],
+    "createdAt": null,
+    "status": "NOT_STARTED"
+  },
+  "players": [
+    {
+      "id": "P-1787578417257-m4fvm",
+      "name": "Dương Văn Cường",
+      "inGameId": "biimeta",
+      "favoriteTeam": "MU",
+      "ovr": 125,
+      "avatarUrl": "",
+      "createdAt": "2026-08-24T13:33:37.258Z"
+    },
+    {
+      "id": "P-1787578475306-s8njq",
+      "name": "Lê Văn Bình",
+      "inGameId": "binHuyen",
+      "favoriteTeam": "Barcelona",
+      "ovr": 125,
+      "avatarUrl": "",
+      "createdAt": "2026-08-24T13:34:35.306Z"
+    },
+    {
+      "id": "P-1787578493634-1s1tq",
+      "name": "Hoàng Văn Thành",
+      "inGameId": "mrFAP",
+      "favoriteTeam": "Arsenal",
+      "ovr": 125,
+      "avatarUrl": "",
+      "createdAt": "2026-08-24T13:34:53.634Z"
+    },
+    {
+      "id": "P-1787578732005-vdmta",
+      "name": "Nguyễn Văn Mạnh",
+      "inGameId": "thichantoi",
+      "favoriteTeam": "MU",
+      "ovr": 125,
+      "avatarUrl": "",
+      "createdAt": "2026-08-24T13:38:52.005Z"
+    }
+  ],
+  "matches": [],
+  "standings": []
+}

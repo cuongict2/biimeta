@@ -67,7 +67,8 @@ export default async function Home() {
     {[
       { href: "/9router_config", icon: "🚀", name: "9Router Config Generator" },
       { href: "/coffee", icon: "☕", name: "Coffee Management System" },
-      { href: "/fb_verify", icon: "🛡️", name: "Facebook Verify Tool" }
+      { href: "/fb_verify", icon: "🛡️", name: "Facebook Verify Tool" },
+      { href: "/fc_mobile", icon: "⚽", name: "FC Mobile Tournament Manager" }
     ].map((project, index) => (
       <Link
         key={index}

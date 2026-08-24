@@ -1,0 +1,463 @@
+/* ============================================================
+   FC MOBILE TOURNAMENT MANAGER - ESPORTS THEME
+   Tone: Black (#0a0e17), Gold (#d4af37), Emerald (#10b981)
+   ============================================================ */
+
+/* ---- BASE ---- */
+.fc-mobile-app {
+  --fc-black: #0a0e17;
+  --fc-dark: #111827;
+  --fc-card: #1a1f2e;
+  --fc-card-hover: #242a3d;
+  --fc-gold: #d4af37;
+  --fc-gold-light: #f0d060;
+  --fc-emerald: #10b981;
+  --fc-emerald-dark: #059669;
+  --fc-red: #ef4444;
+  --fc-blue: #3b82f6;
+  --fc-text: #e5e7eb;
+  --fc-text-muted: #9ca3af;
+  --fc-border: #2d3548;
+  --fc-gradient: linear-gradient(135deg, #d4af37 0%, #10b981 100%);
+  font-family: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+}
+
+/* ---- HEADER ---- */
+.fc-header {
+  background: linear-gradient(180deg, rgba(10, 14, 23, 0.95) 0%, rgba(26, 31, 46, 0.9) 100%);
+  border-bottom: 2px solid var(--fc-gold);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.fc-header-title {
+  background: var(--fc-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- TABS ---- */
+.fc-tab {
+  position: relative;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--fc-text-muted);
+  transition: all 0.3s ease;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.fc-tab:hover {
+  color: var(--fc-gold-light);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.fc-tab-active {
+  color: var(--fc-gold) !important;
+  background: rgba(212, 175, 55, 0.12);
+}
+
+.fc-tab-active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--fc-gradient);
+  border-radius: 3px 3px 0 0;
+}
+
+/* ---- CARDS ---- */
+.fc-card {
+  background: var(--fc-card);
+  border: 1px solid var(--fc-border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.fc-card:hover {
+  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ---- PLAYER CARD ---- */
+.fc-player-card {
+  background: linear-gradient(145deg, #1a1f2e 0%, #151a28 100%);
+  border: 1px solid var(--fc-border);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.fc-player-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--fc-gradient);
+}
+
+.fc-player-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--fc-gold);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.15);
+}
+
+.fc-player-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--fc-gold);
+  margin: 0 auto 12px;
+  background: var(--fc-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--fc-gold);
+  overflow: hidden;
+}
+
+.fc-player-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fc-ovr-badge {
+  background: var(--fc-gradient);
+  color: #000;
+  font-weight: 800;
+  font-size: 1.1rem;
+  padding: 4px 14px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+/* ---- BUTTONS ---- */
+.fc-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.fc-btn-gold {
+  background: var(--fc-gradient);
+  color: #000;
+}
+
+.fc-btn-gold:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.fc-btn-emerald {
+  background: var(--fc-emerald);
+  color: #fff;
+}
+
+.fc-btn-emerald:hover {
+  background: var(--fc-emerald-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.fc-btn-red {
+  background: var(--fc-red);
+  color: #fff;
+}
+
+.fc-btn-red:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.fc-btn-outline {
+  background: transparent;
+  border: 1px solid var(--fc-border);
+  color: var(--fc-text);
+}
+
+.fc-btn-outline:hover {
+  border-color: var(--fc-gold);
+  color: var(--fc-gold);
+}
+
+/* ---- TABLE ---- */
+.fc-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.fc-table thead th {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--fc-gold);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px 12px;
+  border-bottom: 2px solid var(--fc-gold);
+  white-space: nowrap;
+}
+
+.fc-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.fc-table tbody tr:hover {
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.fc-table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--fc-border);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.fc-rank-1 { color: #ffd700; font-weight: 800; }
+.fc-rank-2 { color: #c0c0c0; font-weight: 700; }
+.fc-rank-3 { color: #cd7f32; font-weight: 700; }
+
+/* ---- MATCH CARD ---- */
+.fc-match-card {
+  background: var(--fc-card);
+  border: 1px solid var(--fc-border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  gap: 12px;
+}
+
+.fc-match-card:hover {
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.fc-match-card.completed {
+  border-left: 4px solid var(--fc-emerald);
+}
+
+.fc-match-card.pending {
+  border-left: 4px solid var(--fc-text-muted);
+}
+
+.fc-match-card.finals {
+  border: 2px solid var(--fc-gold);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(26, 31, 46, 1) 100%);
+}
+
+.fc-match-score {
+  font-size: 1.8rem;
+  font-weight: 800;
+  min-width: 50px;
+  text-align: center;
+}
+
+.fc-match-vs {
+  color: var(--fc-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* ---- MODAL ---- */
+.fc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.fc-modal {
+  background: var(--fc-dark);
+  border: 1px solid var(--fc-gold);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.fc-modal h3 {
+  color: var(--fc-gold);
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* ---- INPUTS ---- */
+.fc-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--fc-black);
+  border: 1px solid var(--fc-border);
+  border-radius: 8px;
+  color: var(--fc-text);
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.fc-input:focus {
+  border-color: var(--fc-gold);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.fc-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--fc-black);
+  border: 1px solid var(--fc-border);
+  border-radius: 8px;
+  color: var(--fc-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.fc-select:focus {
+  border-color: var(--fc-gold);
+}
+
+.fc-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fc-text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ---- BADGE / STATUS ---- */
+.fc-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fc-badge-pending {
+  background: rgba(156, 163, 175, 0.2);
+  color: var(--fc-text-muted);
+}
+
+.fc-badge-completed {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--fc-emerald);
+}
+
+.fc-badge-finals {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--fc-gold);
+}
+
+/* ---- CHECKBOX CUSTOM ---- */
+.fc-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--fc-gold);
+  cursor: pointer;
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fc-fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fc-animate-in {
+  animation: fc-fadeIn 0.4s ease forwards;
+}
+
+@keyframes fc-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.fc-pulse {
+  animation: fc-pulse 2s ease-in-out infinite;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .fc-tab {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .fc-match-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .fc-match-score {
+    font-size: 1.4rem;
+  }
+
+  .fc-modal {
+    padding: 20px;
+  }
+
+  .fc-player-card {
+    padding: 14px;
+  }
+
+  .fc-card {
+    padding: 16px;
+  }
+}
+
+/* ---- SCROLLBAR ---- */
+.fc-mobile-app ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fc-mobile-app ::-webkit-scrollbar-track {
+  background: var(--fc-black);
+}
+
+.fc-mobile-app ::-webkit-scrollbar-thumb {
+  background: var(--fc-border);
+  border-radius: 3px;
+}
+
+.fc-mobile-app ::-webkit-scrollbar-thumb:hover {
+  background: var(--fc-gold);
+}
