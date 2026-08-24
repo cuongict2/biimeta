@@ -233,7 +233,7 @@ export default function FCMobileClient() {
     if (match.games.length > 0) {
       setMatchGames([...match.games]);
     } else {
-      setMatchGames([{ scoreHome: 0, scoreAway: 0, goalsHome: 0, goalsAway: 0, winner: "home" }]);
+      setMatchGames([{ goalsHome: 0, goalsAway: 0, winner: "draw" }]);
     }
     setShowMatchModal(true);
   };
@@ -258,7 +258,7 @@ export default function FCMobileClient() {
       showToast("Trận đấu đã kết thúc!");
       return;
     }
-    setMatchGames([...matchGames, { scoreHome: 0, scoreAway: 0, goalsHome: 0, goalsAway: 0, winner: "home" }]);
+    setMatchGames([...matchGames, { goalsHome: 0, goalsAway: 0, winner: "draw" }]);
   };
 
   const handleRemoveLastGame = () => {
@@ -272,20 +272,21 @@ export default function FCMobileClient() {
     value: number | string
   ) => {
     const updated = [...matchGames];
-    if (field === "scoreHome") {
-      updated[index].scoreHome = value as number;
-      if ((value as number) > updated[index].scoreAway) updated[index].winner = "home";
-      else if ((value as number) < updated[index].scoreAway) updated[index].winner = "away";
-      else updated[index].winner = "draw";
-    } else if (field === "scoreAway") {
-      updated[index].scoreAway = value as number;
-      if (updated[index].scoreHome > (value as number)) updated[index].winner = "home";
-      else if (updated[index].scoreHome < (value as number)) updated[index].winner = "away";
-      else updated[index].winner = "draw";
-    } else if (field === "goalsHome") {
+    if (field === "goalsHome") {
       updated[index].goalsHome = value as number;
+      // Tự động tính winner dựa trên bàn thắng
+      const gh = value as number;
+      const ga = updated[index].goalsAway || 0;
+      if (gh > ga) updated[index].winner = "home";
+      else if (ga > gh) updated[index].winner = "away";
+      else updated[index].winner = "draw";
     } else if (field === "goalsAway") {
       updated[index].goalsAway = value as number;
+      const gh = updated[index].goalsHome || 0;
+      const ga = value as number;
+      if (gh > ga) updated[index].winner = "home";
+      else if (ga > gh) updated[index].winner = "away";
+      else updated[index].winner = "draw";
     } else if (field === "winner") {
       updated[index].winner = value as "home" | "away" | "draw";
     }
@@ -1425,105 +1426,47 @@ export default function FCMobileClient() {
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
-                        <label className="fc-label" style={{ fontSize: "0.75rem" }}>
-                          {getPlayerName(selectedMatch.homePlayerId)}
+                        <label className="fc-label" style={{ fontSize: "0.7rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          ⚽ {getPlayerName(selectedMatch.homePlayerId)}
                         </label>
                         <input
-                          className="fc-input"
-                          type="number"
-                          min={0}
-                          value={game.scoreHome}
-                          onChange={(e) =>
-                            handleUpdateGame(index, "scoreHome", parseInt(e.target.value) || 0)
-                          }
-                        />
-                      </div>
-                      <div
-                        className="text-center px-2"
-                        style={{
-                          color: game.winner === "draw" ? "var(--fc-gold)" : "var(--fc-text-muted)",
-                          fontWeight: 700, fontSize: "1.2rem", paddingTop: 18,
-                        }}
-                      >
-                        {game.winner === "home" ? "◀" : game.winner === "away" ? "▶" : "="}
-                      </div>
-                      <div className="flex-1">
-                        <label className="fc-label" style={{ fontSize: "0.75rem" }}>
-                          {getPlayerName(selectedMatch.awayPlayerId)}
-                        </label>
-                        <input
-                          className="fc-input"
-                          type="number"
-                          min={0}
-                          value={game.scoreAway}
-                          onChange={(e) =>
-                            handleUpdateGame(index, "scoreAway", parseInt(e.target.value) || 0)
-                          }
-                        />
-                      </div>
-                    </div>
-                    {/* GOALS INPUT */}
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="flex-1">
-                        <label className="fc-label" style={{ fontSize: "0.7rem", color: "var(--fc-emerald)" }}>
-                          ⚽ Bàn thắng
-                        </label>
-                        <input
-                          className="fc-input"
+                          className="fc-input text-center font-bold"
                           type="number"
                           min={0}
                           value={game.goalsHome ?? 0}
                           onChange={(e) =>
                             handleUpdateGame(index, "goalsHome", parseInt(e.target.value) || 0)
                           }
-                          style={{ fontSize: "0.85rem" }}
+                          style={{ fontSize: "0.95rem", padding: "6px 8px" }}
                         />
                       </div>
-                      <div className="text-center px-2" style={{ paddingTop: 18, fontSize: "0.8rem", color: "var(--fc-text-muted)" }}>
-                        ⚽
+                      <div
+                        className="text-center px-1 font-bold"
+                        style={{
+                          color: game.winner === "draw" ? "var(--fc-text-muted)" : "var(--fc-gold)",
+                          fontSize: "0.9rem", paddingTop: 20,
+                        }}
+                      >
+                        {game.winner === "home" ? "◀" : game.winner === "away" ? "▶" : "-"}
                       </div>
                       <div className="flex-1">
-                        <label className="fc-label" style={{ fontSize: "0.7rem", color: "var(--fc-blue)" }}>
-                          ⚽ Bàn thắng
+                        <label className="fc-label" style={{ fontSize: "0.7rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          ⚽ {getPlayerName(selectedMatch.awayPlayerId)}
                         </label>
                         <input
-                          className="fc-input"
+                          className="fc-input text-center font-bold"
                           type="number"
                           min={0}
                           value={game.goalsAway ?? 0}
                           onChange={(e) =>
                             handleUpdateGame(index, "goalsAway", parseInt(e.target.value) || 0)
                           }
-                          style={{ fontSize: "0.85rem" }}
+                          style={{ fontSize: "0.95rem", padding: "6px 8px" }}
                         />
                       </div>
                     </div>
-                    {/* Override winner nếu hòa tỉ số */}
-                    {game.scoreHome === game.scoreAway && (
-                      <div className="mt-2">
-                        <label
-                          className="fc-label"
-                          style={{ fontSize: "0.75rem" }}
-                        >
-                          Kết quả (Penalty / Extra):
-                        </label>
-                        <select
-                          className="fc-select"
-                          value={game.winner}
-                          onChange={(e) =>
-                            handleUpdateGame(index, "winner", e.target.value)
-                          }
-                        >
-                          <option value="draw">Hòa</option>
-                          <option value="home">
-                            {getPlayerName(selectedMatch.homePlayerId)} thắng
-                          </option>
-                          <option value="away">
-                            {getPlayerName(selectedMatch.awayPlayerId)} thắng
-                          </option>
-                        </select>
-                      </div>
-                    )}
+
+
                     <div
                       className="mt-2 text-xs"
                       style={{ color: "var(--fc-text-muted)" }}
@@ -1709,15 +1652,11 @@ export default function FCMobileClient() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="text-center flex-1">
-                      <div className="text-xs" style={{ color: "var(--fc-text-muted)" }}>Tỉ số</div>
-                      <div className="font-bold text-lg">{game.scoreHome}</div>
-                      <div className="text-xs mt-1" style={{ color: "var(--fc-emerald)" }}>⚽ {game.goalsHome ?? 0} bàn</div>
+                      <div className="font-bold text-lg" style={{ color: "var(--fc-text)" }}>{game.goalsHome ?? 0}</div>
                     </div>
-                    <div className="text-center px-4" style={{ color: "var(--fc-text-muted)" }}>vs</div>
+                    <div className="text-center px-4 font-bold" style={{ color: "var(--fc-text-muted)", fontSize: "0.9rem" }}>vs</div>
                     <div className="text-center flex-1">
-                      <div className="text-xs" style={{ color: "var(--fc-text-muted)" }}>Tỉ số</div>
-                      <div className="font-bold text-lg">{game.scoreAway}</div>
-                      <div className="text-xs mt-1" style={{ color: "var(--fc-blue)" }}>⚽ {game.goalsAway ?? 0} bàn</div>
+                      <div className="font-bold text-lg" style={{ color: "var(--fc-text)" }}>{game.goalsAway ?? 0}</div>
                     </div>
                   </div>
                 </div>

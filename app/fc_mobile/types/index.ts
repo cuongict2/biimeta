@@ -13,10 +13,8 @@ export type Player = {
 };
 
 export type GameResult = {
-  scoreHome: number;
-  scoreAway: number;
-  goalsHome: number;  // Bàn thắng home ghi được
-  goalsAway: number;  // Bàn thắng away ghi được
+  goalsHome: number;  // Bàn thắng/Tỉ số home ghi được trong game
+  goalsAway: number;  // Bàn thắng/Tỉ số away ghi được trong game
   winner: "home" | "away" | "draw";
 };
 

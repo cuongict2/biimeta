@@ -58,27 +58,20 @@ export async function PUT(req: NextRequest) {
     }
 
     for (const game of games) {
-      if (game.scoreHome < 0 || game.scoreAway < 0) {
-        return Response.json(
-          { error: "Tỉ số không được âm." },
-          { status: 400 }
-        );
-      }
       if ((game.goalsHome ?? 0) < 0 || (game.goalsAway ?? 0) < 0) {
         return Response.json(
-          { error: "Bàn thắng không được âm." },
+          { error: "Bàn thắng/Tỉ số không được âm." },
           { status: 400 }
         );
       }
-      if (!["home", "away", "draw"].includes(game.winner)) {
-        return Response.json(
-          { error: "Winner phải là home, away hoặc draw." },
-          { status: 400 }
-        );
-      }
-      // Đảm bảo goalsHome/goalsAway luôn có giá trị
+      // Đảm bảo goalsHome/goalsAway luôn có giá trị số nguyên
       game.goalsHome = game.goalsHome ?? 0;
       game.goalsAway = game.goalsAway ?? 0;
+
+      // Tự động gán lại winner dựa trên bàn thắng thực tế
+      if (game.goalsHome > game.goalsAway) game.winner = "home";
+      else if (game.goalsAway > game.goalsHome) game.winner = "away";
+      else game.winner = "draw";
     }
 
     // Tính toán kết quả

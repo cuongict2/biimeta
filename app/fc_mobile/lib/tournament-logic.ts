@@ -138,12 +138,14 @@ export function calculateMatchResult(games: GameResult[], isGroupPhase: boolean 
   let totalGoalsAway = 0;
 
   for (const game of games) {
-    totalGoalsHome += game.goalsHome || 0;
-    totalGoalsAway += game.goalsAway || 0;
+    const gh = game.goalsHome || 0;
+    const ga = game.goalsAway || 0;
+    totalGoalsHome += gh;
+    totalGoalsAway += ga;
 
-    if (game.winner === "home") {
+    if (gh > ga) {
       homeWins++;
-    } else if (game.winner === "away") {
+    } else if (ga > gh) {
       awayWins++;
     }
   }
