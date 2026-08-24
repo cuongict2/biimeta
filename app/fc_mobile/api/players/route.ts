@@ -14,32 +14,40 @@ export async function GET() {
 
 // POST - Thêm người chơi mới
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { name, inGameId, favoriteTeam, ovr, avatarUrl } = body;
+  try {
+    const body = await req.json();
+    const { name, inGameId, favoriteTeam, ovr, avatarUrl } = body;
 
-  if (!name || !inGameId) {
-    return Response.json(
-      { error: "Tên và In-game ID là bắt buộc." },
-      { status: 400 }
-    );
-  }
+    if (!name || !inGameId) {
+      return Response.json(
+        { error: "Tên và In-game ID là bắt buộc." },
+        { status: 400 }
+      );
+    }
 
   const data = await readTournamentData();
 
-  const newPlayer: Player = {
-    id: `P-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-    name,
-    inGameId,
-    favoriteTeam: favoriteTeam || "",
-    ovr: ovr || 0,
-    avatarUrl: avatarUrl || "",
-    createdAt: new Date().toISOString(),
-  };
+    const newPlayer: Player = {
+      id: `P-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      name,
+      inGameId,
+      favoriteTeam: favoriteTeam || "",
+      ovr: ovr || 0,
+      avatarUrl: avatarUrl || "",
+      createdAt: new Date().toISOString(),
+    };
 
-  data.players.push(newPlayer);
-  await writeTournamentData(data);
+    data.players.push(newPlayer);
+    await writeTournamentData(data);
 
   return Response.json({ player: newPlayer }, { status: 201 });
+  } catch (err: any) {
+    console.error("[API Players POST Error]:", err);
+    return Response.json(
+      { error: err.message || "Lỗi Server nội bộ", details: err.toString() },
+      { status: 500 }
+    );
+  }
 }
 
 // PUT - Cập nhật thông tin người chơi

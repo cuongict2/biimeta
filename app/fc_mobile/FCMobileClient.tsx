@@ -117,7 +117,7 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || "Có lỗi xảy ra!");
+        showToast(json.error || (json.details ? `Lỗi: ${json.details}` : "Có lỗi xảy ra!"));
         return;
       }
 
@@ -190,7 +190,7 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || "Có lỗi xảy ra!");
+        showToast(json.error || (json.details ? `Lỗi: ${json.details}` : "Có lỗi xảy ra!"));
         return;
       }
 
@@ -331,7 +331,7 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || "Có lỗi xảy ra!");
+        showToast(json.error || (json.details ? `Lỗi: ${json.details}` : "Có lỗi xảy ra!"));
         return;
       }
 
