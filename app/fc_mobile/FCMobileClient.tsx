@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import html2canvas from 'html2canvas-pro';
@@ -55,16 +55,16 @@ export default function FCMobileClient() {
   const [selectedPlayerIds, setSelectedPlayerIds] = useState<string[]>([]);
   const [selectedLegs, setSelectedLegs] = useState<1 | 2>(1);
 
-  // Match Detail Modal (xem lß║íi chi tiß║┐t sau khi l╞░u)
+  // Match Detail Modal (xem lại chi tiết sau khi lưu)
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailMatch, setDetailMatch] = useState<Match | null>(null);
 
-  // Bß╗Ö lß╗ìc trß║¡n ─æß║Ñu
+  // Bộ lọc trận đấu
   type MatchFilter = "all" | "pending" | "completed";
   const [matchFilter, setMatchFilter] = useState<MatchFilter>("all");
   const [matchSearch, setMatchSearch] = useState("");
 
-  // Ref cho BXH ─æß╗â chß╗Ñp ß║únh
+  // Ref cho BXH để chụp ảnh
   const standingsRef = useRef<HTMLDivElement>(null);
 
   // ---- DATA FETCHING ----
@@ -74,7 +74,7 @@ export default function FCMobileClient() {
       const json = await res.json();
       setData(json);
     } catch {
-      showToast("Lß╗ùi tß║úi dß╗» liß╗çu!");
+      showToast("Lỗi tải dữ liệu!");
     } finally {
       setLoading(false);
     }
@@ -103,7 +103,7 @@ export default function FCMobileClient() {
   // ============================================================
   const handleSavePlayer = async () => {
     if (!playerForm.name.trim() || !playerForm.inGameId.trim()) {
-      showToast("Vui l├▓ng nhß║¡p T├¬n v├á In-game ID!");
+      showToast("Vui lòng nhập Tên và In-game ID!");
       return;
     }
 
@@ -117,17 +117,17 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || (json.details ? `Lß╗ùi: ${json.details}` : "C├│ lß╗ùi xß║úy ra!"));
+        showToast(json.error || (json.details ? `Lỗi: ${json.details}` : "Có lỗi xảy ra!"));
         return;
       }
 
-      showToast(editingPlayer ? "─É├ú cß║¡p nhß║¡t game thß╗º!" : "─É├ú th├¬m game thß╗º!");
+      showToast(editingPlayer ? "Đã cập nhật game thủ!" : "Đã thêm game thủ!");
       setShowPlayerModal(false);
       setPlayerForm(EMPTY_PLAYER_FORM);
       setEditingPlayer(false);
       fetchData();
     } catch {
-      showToast("Lß╗ùi kß║┐t nß╗æi!");
+      showToast("Lỗi kết nối!");
     }
   };
 
@@ -145,7 +145,7 @@ export default function FCMobileClient() {
   };
 
   const handleDeletePlayer = async (id: string) => {
-    if (!confirm("Bß║ín c├│ chß║»c muß╗æn x├│a game thß╗º n├áy?")) return;
+    if (!confirm("Bạn có chắc muốn xóa game thủ này?")) return;
 
     try {
       const res = await fetch(`/fc_mobile/api/players?id=${id}`, {
@@ -154,14 +154,14 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || "Kh├┤ng thß╗â x├│a!");
+        showToast(json.error || "Không thể xóa!");
         return;
       }
 
-      showToast("─É├ú x├│a game thß╗º!");
+      showToast("Đã xóa game thủ!");
       fetchData();
     } catch {
-      showToast("Lß╗ùi kß║┐t nß╗æi!");
+      showToast("Lỗi kết nối!");
     }
   };
 
@@ -170,11 +170,11 @@ export default function FCMobileClient() {
   // ============================================================
   const handleCreateTournament = async () => {
     if (selectedPlayerIds.length < 3) {
-      showToast("Cß║ºn tß╗æi thiß╗âu 3 ng╞░ß╗¥i ch╞íi!");
+      showToast("Cần tối thiểu 3 người chơi!");
       return;
     }
     if (selectedPlayerIds.length > 8) {
-      showToast("Tß╗æi ─æa 8 ng╞░ß╗¥i ch╞íi!");
+      showToast("Tối đa 8 người chơi!");
       return;
     }
 
@@ -190,22 +190,22 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || (json.details ? `Lß╗ùi: ${json.details}` : "C├│ lß╗ùi xß║úy ra!"));
+        showToast(json.error || (json.details ? `Lỗi: ${json.details}` : "Có lỗi xảy ra!"));
         return;
       }
 
       showToast(
-        `Giß║úi ─æß║Ñu ─æ├ú tß║ío! ${json.totalGroupMatches} trß║¡n v├▓ng loß║íi + ${json.totalFinalsMatches} trß║¡n chung kß║┐t`
+        `Giải đấu đã tạo! ${json.totalGroupMatches} trận vòng loại + ${json.totalFinalsMatches} trận chung kết`
       );
       setActiveTab("dashboard");
       fetchData();
     } catch {
-      showToast("Lß╗ùi kß║┐t nß╗æi!");
+      showToast("Lỗi kết nối!");
     }
   };
 
   const handleResetTournament = async () => {
-    if (!confirm("Bß║ín c├│ chß║»c muß╗æn RESET to├án bß╗Ö giß║úi ─æß║Ñu? Dß╗» liß╗çu trß║¡n ─æß║Ñu sß║╜ bß╗ï x├│a!"))
+    if (!confirm("Bạn có chắc muốn RESET toàn bộ giải đấu? Dữ liệu trận đấu sẽ bị xóa!"))
       return;
 
     try {
@@ -213,15 +213,15 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || "C├│ lß╗ùi xß║úy ra!");
+        showToast(json.error || "Có lỗi xảy ra!");
         return;
       }
 
-      showToast("Giß║úi ─æß║Ñu ─æ├ú ─æ╞░ß╗úc reset!");
+      showToast("Giải đấu đã được reset!");
       setSelectedPlayerIds([]);
       fetchData();
     } catch {
-      showToast("Lß╗ùi kß║┐t nß╗æi!");
+      showToast("Lỗi kết nối!");
     }
   };
 
@@ -244,10 +244,10 @@ export default function FCMobileClient() {
     const targetWins = isGroup ? 2 : 3;
 
     if (matchGames.length >= maxGames) {
-      showToast(`Tß╗æi ─æa ${maxGames} game!`);
+      showToast(`Tối đa ${maxGames} game!`);
       return;
     }
-    // Kiß╗âm tra ─æ├ú c├│ ai thß║»ng chß║ím ch╞░a
+    // Kiểm tra đã có ai thắng chạm chưa
     let hw = 0,
       aw = 0;
     for (const g of matchGames) {
@@ -255,7 +255,7 @@ export default function FCMobileClient() {
       if (g.winner === "away") aw++;
     }
     if (hw >= targetWins || aw >= targetWins) {
-      showToast("Trß║¡n ─æß║Ñu ─æ├ú kß║┐t th├║c!");
+      showToast("Trận đấu đã kết thúc!");
       return;
     }
     setMatchGames([...matchGames, { goalsHome: 0, goalsAway: 0, winner: "draw" }]);
@@ -274,7 +274,7 @@ export default function FCMobileClient() {
     const updated = [...matchGames];
     if (field === "goalsHome") {
       updated[index].goalsHome = value as number;
-      // Tß╗▒ ─æß╗Öng t├¡nh winner dß╗▒a tr├¬n b├án thß║»ng
+      // Tự động tính winner dựa trên bàn thắng
       const gh = value as number;
       const ga = updated[index].goalsAway || 0;
       if (gh > ga) updated[index].winner = "home";
@@ -296,7 +296,7 @@ export default function FCMobileClient() {
   const handleSaveMatch = async () => {
     if (!selectedMatch) return;
 
-    // T├¡nh to├ín sß╗æ trß║¡n thß║»ng hiß╗çn tß║íi
+    // Tính toán số trận thắng hiện tại
     let hw = 0, aw = 0;
     for (const g of matchGames) {
       if (g.winner === "home") hw++;
@@ -308,14 +308,14 @@ export default function FCMobileClient() {
       const hasWinner = hw >= 2 || aw >= 2;
       const reachedMaxGames = matchGames.length === 3;
       if (!hasWinner && !reachedMaxGames) {
-        showToast("Trß║¡n ─æß║Ñu ch╞░a kß║┐t th├║c! V├▓ng loß║íi y├¬u cß║ºu thß║»ng chß║ím 2 game hoß║╖c ─æß║Ñu ─æß╗º 3 game.");
+        showToast("Trận đấu chưa kết thúc! Vòng loại yêu cầu thắng chạm 2 game hoặc đấu đủ 3 game.");
         return;
       }
     } else {
       const hasWinner = hw >= 3 || aw >= 3;
       const reachedMaxGames = matchGames.length === 5;
       if (!hasWinner && !reachedMaxGames) {
-        showToast("Trß║¡n ─æß║Ñu ch╞░a kß║┐t th├║c! Chung kß║┐t y├¬u cß║ºu thß║»ng chß║ím 3 game hoß║╖c ─æß║Ñu ─æß╗º 5 game.");
+        showToast("Trận đấu chưa kết thúc! Chung kết yêu cầu thắng chạm 3 game hoặc đấu đủ 5 game.");
         return;
       }
     }
@@ -332,24 +332,24 @@ export default function FCMobileClient() {
       const json = await res.json();
 
       if (!res.ok) {
-        showToast(json.error || (json.details ? `Lß╗ùi: ${json.details}` : "C├│ lß╗ùi xß║úy ra!"));
+        showToast(json.error || (json.details ? `Lỗi: ${json.details}` : "Có lỗi xảy ra!"));
         return;
       }
 
-      showToast("─É├ú cß║¡p nhß║¡t kß║┐t quß║ú trß║¡n ─æß║Ñu!");
+      showToast("Đã cập nhật kết quả trận đấu!");
 
       if (json.tournamentStatus === "FINALS" && data.config.status === "GROUP_STAGE") {
-        showToast("≡ƒÅå V├▓ng loß║íi ho├án tß║Ñt! Chuyß╗ân sang Chung kß║┐t!");
+        showToast("🏆 Vòng loại hoàn tất! Chuyển sang Chung kết!");
       }
       if (json.tournamentStatus === "COMPLETED") {
-        showToast("≡ƒÄë Giß║úi ─æß║Ñu ─æ├ú kß║┐t th├║c!");
+        showToast("🎉 Giải đấu đã kết thúc!");
       }
 
       setShowMatchModal(false);
       setSelectedMatch(null);
       fetchData();
     } catch {
-      showToast("Lß╗ùi kß║┐t nß╗æi!");
+      showToast("Lỗi kết nối!");
     }
   };
 
@@ -368,9 +368,9 @@ export default function FCMobileClient() {
       link.download = `BXH_FC_Mobile_${new Date().toLocaleDateString('vi-VN').replace(/\//g, '-')}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      showToast('─É├ú tß║úi ß║únh BXH!');
+      showToast('Đã tải ảnh BXH!');
     } catch {
-      showToast('Lß╗ùi khi tß║ío ß║únh!');
+      showToast('Lỗi khi tạo ảnh!');
     }
   };
 
@@ -423,8 +423,8 @@ export default function FCMobileClient() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="fc-pulse text-4xl mb-4">ΓÜ╜</div>
-          <p className="text-[var(--fc-text-muted)] text-lg">─Éang tß║úi...</p>
+          <div className="fc-pulse text-4xl mb-4">⚽</div>
+          <p className="text-[var(--fc-text-muted)] text-lg">Đang tải...</p>
         </div>
       </div>
     );
@@ -467,7 +467,7 @@ export default function FCMobileClient() {
       <header className="fc-header px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">ΓÜ╜</span>
+            <span className="text-3xl">⚽</span>
             <h1 className="fc-header-title text-2xl font-extrabold tracking-tight">
               FC Mobile Tournament
             </h1>
@@ -480,10 +480,10 @@ export default function FCMobileClient() {
                 ? "fc-badge-completed"
                 : "fc-badge-finals"
             }`}>
-              {data.config.status === "NOT_STARTED" && "Ch╞░a bß║»t ─æß║ºu"}
-              {data.config.status === "GROUP_STAGE" && "V├▓ng loß║íi"}
-              {data.config.status === "FINALS" && "Chung kß║┐t"}
-              {data.config.status === "COMPLETED" && "Ho├án th├ánh"}
+              {data.config.status === "NOT_STARTED" && "Chưa bắt đầu"}
+              {data.config.status === "GROUP_STAGE" && "Vòng loại"}
+              {data.config.status === "FINALS" && "Chung kết"}
+              {data.config.status === "COMPLETED" && "Hoàn thành"}
             </span>
           </div>
         </div>
@@ -496,9 +496,9 @@ export default function FCMobileClient() {
               onClick={() => setActiveTab(tab)}
               className={`fc-tab ${activeTab === tab ? "fc-tab-active" : ""}`}
             >
-              {tab === "dashboard" && "≡ƒôè Dashboard"}
-              {tab === "players" && "≡ƒÄ« Game Thß╗º"}
-              {tab === "matches" && "≡ƒÅƒ∩╕Å Trß║¡n ─Éß║Ñu"}
+              {tab === "dashboard" && "📊 Dashboard"}
+              {tab === "players" && "🎮 Game Thủ"}
+              {tab === "matches" && "🏟️ Trận Đấu"}
             </button>
           ))}
         </div>
@@ -521,7 +521,7 @@ export default function FCMobileClient() {
                       textAlign: "center",
                     }}
                   >
-                    ΓÜÖ∩╕Å Cß║Ñu H├¼nh Giß║úi ─Éß║Ñu
+                    ⚙️ Cấu Hình Giải Đấu
                   </h3>
 
                   {data.players.length < 3 ? (
@@ -531,24 +531,24 @@ export default function FCMobileClient() {
                         color: "var(--fc-text-muted)",
                       }}
                     >
-                      Cß║ºn th├¬m ├¡t nhß║Ñt 3 game thß╗º. Hiß╗çn c├│:{" "}
+                      Cần thêm ít nhất 3 game thủ. Hiện có:{" "}
                       <strong>{data.players.length}</strong>
                       <br />
                       <button
                         className="fc-btn fc-btn-gold mt-4"
                         onClick={() => setActiveTab("players")}
                       >
-                        Th├¬m Game Thß╗º
+                        Thêm Game Thủ
                       </button>
                     </p>
                   ) : (
                     <>
-                      {/* Chß╗ìn ng╞░ß╗¥i ch╞íi */}
+                      {/* Chọn người chơi */}
                       <div className="mb-6">
                         <label className="fc-label mb-3 block">
-                          Chß╗ìn ng╞░ß╗¥i ch╞íi tham gia (3-8 ng╞░ß╗¥i):{" "}
+                          Chọn người chơi tham gia (3-8 người):{" "}
                           <strong className="text-[var(--fc-gold)]">
-                            {selectedPlayerIds.length} ─æ├ú chß╗ìn
+                            {selectedPlayerIds.length} đã chọn
                           </strong>
                         </label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -578,10 +578,10 @@ export default function FCMobileClient() {
                         </div>
                       </div>
 
-                      {/* Chß╗ìn sß╗æ l╞░ß╗út */}
+                      {/* Chọn số lượt */}
                       <div className="mb-6">
                         <label className="fc-label mb-2 block">
-                          Sß╗æ l╞░ß╗út ─æß║Ñu v├▓ng loß║íi:
+                          Số lượt đấu vòng loại:
                         </label>
                         <div className="flex gap-4">
                           <label
@@ -598,7 +598,7 @@ export default function FCMobileClient() {
                               onChange={() => setSelectedLegs(1)}
                               style={{ accentColor: "var(--fc-gold)" }}
                             />
-                            <span className="font-semibold">1 l╞░ß╗út (L╞░ß╗út ─æi)</span>
+                            <span className="font-semibold">1 lượt (Lượt đi)</span>
                           </label>
                           <label
                             className={`flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-all ${
@@ -615,7 +615,7 @@ export default function FCMobileClient() {
                               style={{ accentColor: "var(--fc-gold)" }}
                             />
                             <span className="font-semibold">
-                              2 l╞░ß╗út (L╞░ß╗út ─æi & vß╗ü)
+                              2 lượt (Lượt đi & về)
                             </span>
                           </label>
                         </div>
@@ -628,7 +628,7 @@ export default function FCMobileClient() {
                           onClick={handleCreateTournament}
                           disabled={selectedPlayerIds.length < 3}
                         >
-                          ≡ƒÅå Tß║ío Giß║úi ─Éß║Ñu
+                          🏆 Tạo Giải Đấu
                         </button>
                       </div>
                     </>
@@ -641,7 +641,7 @@ export default function FCMobileClient() {
             {!isNotStarted && (
               <div className="flex justify-end mb-4">
                 <button className="fc-btn fc-btn-red" onClick={handleResetTournament}>
-                  ≡ƒùæ∩╕Å Reset Giß║úi ─Éß║Ñu
+                  🗑️ Reset Giải Đấu
                 </button>
               </div>
             )}
@@ -667,14 +667,14 @@ export default function FCMobileClient() {
                         textAlign: "left",
                       }}
                     >
-                      ≡ƒôè Bß║úng Xß║┐p Hß║íng V├▓ng Loß║íi
+                      📊 Bảng Xếp Hạng Vòng Loại
                     </h3>
                     <button
                       className="fc-btn fc-btn-outline"
                       style={{ padding: "6px 14px", fontSize: "0.75rem" }}
                       onClick={handleDownloadStandings}
                     >
-                      ≡ƒô╕ Tß║úi ß║únh BXH
+                      📸 Tải ảnh BXH
                     </button>
                   </div>
                   <div style={{ overflowX: "auto" }}>
@@ -682,8 +682,8 @@ export default function FCMobileClient() {
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th style={{ textAlign: "left" }}>Game Thß╗º</th>
-                          <th>Trß║¡n</th>
+                          <th style={{ textAlign: "left" }}>Game Thủ</th>
+                          <th>Trận</th>
                           <th>T</th>
                           <th>H</th>
                           <th>B</th>
@@ -693,7 +693,7 @@ export default function FCMobileClient() {
                           <th>GF</th>
                           <th>GA</th>
                           <th>+/-</th>
-                          <th>─Éiß╗âm</th>
+                          <th>Điểm</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -710,7 +710,7 @@ export default function FCMobileClient() {
                           return (
                             <tr key={s.playerId}>
                               <td className={rankClass}>
-                                {s.rank <= 3 ? ["≡ƒÑç", "≡ƒÑê", "≡ƒÑë"][s.rank - 1] : s.rank}
+                                {s.rank <= 3 ? ["🥇", "🥈", "🥉"][s.rank - 1] : s.rank}
                               </td>
                               <td style={{ textAlign: "left", fontWeight: 600 }}>
                                 <div className="flex items-center gap-2">
@@ -727,7 +727,7 @@ export default function FCMobileClient() {
                                         }}
                                       />
                                     ) : (
-                                      "≡ƒæñ"
+                                      "👤"
                                     )}
                                   </span>
                                   <span>{player?.name || s.playerId}</span>
@@ -803,7 +803,7 @@ export default function FCMobileClient() {
                       textAlign: "center",
                     }}
                   >
-                    ≡ƒÅå V├▓ng Chung Kß║┐t
+                    🏆 Vòng Chung Kết
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {finalsMatches.map((match) => {
@@ -811,8 +811,8 @@ export default function FCMobileClient() {
                       const awayName = getPlayerName(match.awayPlayerId);
                       const label =
                         match.phase === "FINAL"
-                          ? "≡ƒÑç Chung Kß║┐t - Tranh Nhß║Ñt Nh├¼"
-                          : "≡ƒÑë Tranh Hß║íng Ba - T╞░";
+                          ? "🥇 Chung Kết - Tranh Nhất Nhì"
+                          : "🥉 Tranh Hạng Ba - Tư";
 
                       return (
                         <div
@@ -879,7 +879,7 @@ export default function FCMobileClient() {
                                 : "fc-badge-pending"
                             }`}
                           >
-                            {match.status === "COMPLETED" ? "─É├ú ─æß║Ñu" : "Ch╞░a ─æß║Ñu"}
+                            {match.status === "COMPLETED" ? "Đã đấu" : "Chưa đấu"}
                           </span>
                         </div>
                       );
@@ -901,7 +901,7 @@ export default function FCMobileClient() {
                       textAlign: "left",
                     }}
                   >
-                    ≡ƒôà Lß╗ïch Thi ─Éß║Ñu V├▓ng Loß║íi
+                    📅 Lịch Thi Đấu Vòng Loại
                   </h3>
                   <div className="space-y-3">
                     {groupMatches.map((match) => (
@@ -953,7 +953,7 @@ export default function FCMobileClient() {
                               : "fc-badge-pending"
                           }`}
                         >
-                          {match.status === "COMPLETED" ? "Γ£à" : "ΓÅ│"}
+                          {match.status === "COMPLETED" ? "✅" : "⏳"}
                         </span>
                         <span
                           className="text-xs"
@@ -982,7 +982,7 @@ export default function FCMobileClient() {
                   textAlign: "left",
                 }}
               >
-                ≡ƒÄ« Quß║ún L├╜ Game Thß╗º ({data.players.length})
+                🎮 Quản Lý Game Thủ ({data.players.length})
               </h2>
               <button
                 className="fc-btn fc-btn-gold"
@@ -992,15 +992,15 @@ export default function FCMobileClient() {
                   setShowPlayerModal(true);
                 }}
               >
-                + Th├¬m Game Thß╗º
+                + Thêm Game Thủ
               </button>
             </div>
 
             {data.players.length === 0 ? (
               <div className="fc-card text-center py-16">
-                <div className="text-5xl mb-4">≡ƒÄ«</div>
+                <div className="text-5xl mb-4">🎮</div>
                 <p style={{ color: "var(--fc-text-muted)", fontSize: "1.1rem" }}>
-                  Ch╞░a c├│ game thß╗º n├áo. H├úy th├¬m game thß╗º ─æß╗â bß║»t ─æß║ºu!
+                  Chưa có game thủ nào. Hãy thêm game thủ để bắt đầu!
                 </p>
               </div>
             ) : (
@@ -1011,7 +1011,7 @@ export default function FCMobileClient() {
                       {player.avatarUrl ? (
                         <img src={player.avatarUrl} alt={player.name} />
                       ) : (
-                        "≡ƒæñ"
+                        "👤"
                       )}
                     </div>
                     <h4
@@ -1041,7 +1041,7 @@ export default function FCMobileClient() {
                           margin: "2px 0",
                         }}
                       >
-                        ΓÜ╜ {player.favoriteTeam}
+                        ⚽ {player.favoriteTeam}
                       </p>
                     )}
                     <div className="fc-ovr-badge">{player.ovr}</div>
@@ -1051,14 +1051,14 @@ export default function FCMobileClient() {
                         style={{ padding: "6px 14px", fontSize: "0.8rem" }}
                         onClick={() => handleEditPlayer(player)}
                       >
-                        Γ£Å∩╕Å Sß╗¡a
+                        ✏️ Sửa
                       </button>
                       <button
                         className="fc-btn fc-btn-red"
                         style={{ padding: "6px 14px", fontSize: "0.8rem" }}
                         onClick={() => handleDeletePlayer(player.id)}
                       >
-                        ≡ƒùæ∩╕Å X├│a
+                        🗑️ Xóa
                       </button>
                     </div>
                   </div>
@@ -1079,25 +1079,25 @@ export default function FCMobileClient() {
                 textAlign: "left",
               }}
             >
-              ≡ƒÅƒ∩╕Å Nhß║¡p Kß║┐t Quß║ú Trß║¡n ─Éß║Ñu
+              🏟️ Nhập Kết Quả Trận Đấu
             </h2>
 
             {isNotStarted ? (
               <div className="fc-card text-center py-16">
-                <div className="text-5xl mb-4">≡ƒÅƒ∩╕Å</div>
+                <div className="text-5xl mb-4">🏟️</div>
                 <p style={{ color: "var(--fc-text-muted)", fontSize: "1.1rem" }}>
-                  Ch╞░a tß║ío giß║úi ─æß║Ñu. H├úy v├áo Dashboard ─æß╗â cß║Ñu h├¼nh v├á tß║ío giß║úi!
+                  Chưa tạo giải đấu. Hãy vào Dashboard để cấu hình và tạo giải!
                 </p>
                 <button
                   className="fc-btn fc-btn-gold mt-4"
                   onClick={() => setActiveTab("dashboard")}
                 >
-                  ─Éi tß╗¢i Dashboard
+                  Đi tới Dashboard
                 </button>
               </div>
             ) : (
               <>
-                {/* Bß╗ÿ Lß╗îC */}
+                {/* BỘ LỌC */}
                 <div className="fc-card mb-6" style={{ padding: "16px 20px" }}>
                   <div className="flex flex-wrap items-center gap-3">
                     <div className="flex gap-2">
@@ -1108,16 +1108,16 @@ export default function FCMobileClient() {
                           style={{ padding: "6px 14px", fontSize: "0.8rem" }}
                           onClick={() => setMatchFilter(f)}
                         >
-                          {f === "all" && "Tß║Ñt cß║ú"}
-                          {f === "pending" && "ΓÅ│ Ch╞░a ─æ├í"}
-                          {f === "completed" && "Γ£à ─É├ú xong"}
+                          {f === "all" && "Tất cả"}
+                          {f === "pending" && "⏳ Chưa đá"}
+                          {f === "completed" && "✅ Đã xong"}
                         </button>
                       ))}
                     </div>
                     <div className="flex-1" style={{ minWidth: 200 }}>
                       <input
                         className="fc-input"
-                        placeholder="≡ƒöì T├¼m theo t├¬n game thß╗º..."
+                        placeholder="🔍 Tìm theo tên game thủ..."
                         value={matchSearch}
                         onChange={(e) => setMatchSearch(e.target.value)}
                         style={{ padding: "8px 14px" }}
@@ -1137,12 +1137,12 @@ export default function FCMobileClient() {
                         textAlign: "left",
                       }}
                     >
-                      ≡ƒôï V├▓ng Loß║íi ({groupMatches.filter((m) => m.status === "COMPLETED").length}/
-                      {groupMatches.length} trß║¡n)
+                      📋 Vòng Loại ({groupMatches.filter((m) => m.status === "COMPLETED").length}/
+                      {groupMatches.length} trận)
                     </h3>
                     {getFilteredMatches(groupMatches).length === 0 ? (
                       <p style={{ color: "var(--fc-text-muted)", textAlign: "center", padding: 20 }}>
-                        Kh├┤ng c├│ trß║¡n ─æß║Ñu ph├╣ hß╗úp bß╗Ö lß╗ìc.
+                        Không có trận đấu phù hợp bộ lọc.
                       </p>
                     ) : (
                       <div className="space-y-3">
@@ -1181,7 +1181,7 @@ export default function FCMobileClient() {
                                   style={{ padding: "6px 10px", fontSize: "0.75rem" }}
                                   onClick={(e) => { e.stopPropagation(); handleViewDetail(match); }}
                                 >
-                                  ≡ƒæü∩╕Å
+                                  👁️
                                 </button>
                               )}
                               <button
@@ -1189,7 +1189,7 @@ export default function FCMobileClient() {
                                 style={{ padding: "6px 14px", fontSize: "0.8rem" }}
                                 onClick={(e) => { e.stopPropagation(); handleOpenMatchModal(match); }}
                               >
-                                {match.status === "COMPLETED" ? "≡ƒô¥ Sß╗¡a" : "Γ£Å∩╕Å Nhß║¡p"}
+                                {match.status === "COMPLETED" ? "📝 Sửa" : "✏️ Nhập"}
                               </button>
                             </div>
                           </div>
@@ -1211,7 +1211,7 @@ export default function FCMobileClient() {
                           textAlign: "left",
                         }}
                       >
-                        ≡ƒÅå Chung Kß║┐t
+                        🏆 Chung Kết
                       </h3>
                       <div className="space-y-3">
                         {finalsMatches
@@ -1224,7 +1224,7 @@ export default function FCMobileClient() {
                               onClick={() => match.status === "COMPLETED" ? handleViewDetail(match) : handleOpenMatchModal(match)}
                             >
                               <div className="text-sm font-bold" style={{ color: "var(--fc-gold)" }}>
-                                {match.phase === "FINAL" ? "≡ƒÑç CK" : "≡ƒÑë H3"}
+                                {match.phase === "FINAL" ? "🥇 CK" : "🥉 H3"}
                               </div>
                               <div className="flex-1 text-right font-semibold">
                                 {getPlayerName(match.homePlayerId)}
@@ -1254,7 +1254,7 @@ export default function FCMobileClient() {
                                     style={{ padding: "6px 10px", fontSize: "0.75rem" }}
                                     onClick={(e) => { e.stopPropagation(); handleViewDetail(match); }}
                                   >
-                                    ≡ƒæü∩╕Å
+                                    👁️
                                   </button>
                                 )}
                                 <button
@@ -1262,7 +1262,7 @@ export default function FCMobileClient() {
                                   style={{ padding: "6px 14px", fontSize: "0.8rem" }}
                                   onClick={(e) => { e.stopPropagation(); handleOpenMatchModal(match); }}
                                 >
-                                  {match.status === "COMPLETED" ? "≡ƒô¥ Sß╗¡a" : "Γ£Å∩╕Å Nhß║¡p"}
+                                  {match.status === "COMPLETED" ? "📝 Sửa" : "✏️ Nhập"}
                                 </button>
                               </div>
                             </div>
@@ -1283,14 +1283,14 @@ export default function FCMobileClient() {
           onClick={() => setShowPlayerModal(false)}
         >
           <div className="fc-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{editingPlayer ? "Γ£Å∩╕Å Chß╗ënh Sß╗¡a Game Thß╗º" : "Γ₧ò Th├¬m Game Thß╗º"}</h3>
+            <h3>{editingPlayer ? "✏️ Chỉnh Sửa Game Thủ" : "➕ Thêm Game Thủ"}</h3>
 
             <div className="space-y-4">
               <div>
-                <label className="fc-label">T├¬n *</label>
+                <label className="fc-label">Tên *</label>
                 <input
                   className="fc-input"
-                  placeholder="Nhß║¡p t├¬n game thß╗º..."
+                  placeholder="Nhập tên game thủ..."
                   value={playerForm.name}
                   onChange={(e) =>
                     setPlayerForm({ ...playerForm, name: e.target.value })
@@ -1301,7 +1301,7 @@ export default function FCMobileClient() {
                 <label className="fc-label">In-game ID *</label>
                 <input
                   className="fc-input"
-                  placeholder="Nhß║¡p ID trong game..."
+                  placeholder="Nhập ID trong game..."
                   value={playerForm.inGameId}
                   onChange={(e) =>
                     setPlayerForm({ ...playerForm, inGameId: e.target.value })
@@ -1309,7 +1309,7 @@ export default function FCMobileClient() {
                 />
               </div>
               <div>
-                <label className="fc-label">─Éß╗Öi b├│ng y├¬u th├¡ch</label>
+                <label className="fc-label">Đội bóng yêu thích</label>
                 <input
                   className="fc-input"
                   placeholder="VD: Real Madrid, Man City..."
@@ -1320,7 +1320,7 @@ export default function FCMobileClient() {
                 />
               </div>
               <div>
-                <label className="fc-label">OVR / Chß╗ë sß╗æ ─æß╗Öi h├¼nh</label>
+                <label className="fc-label">OVR / Chỉ số đội hình</label>
                 <input
                   className="fc-input"
                   type="number"
@@ -1350,13 +1350,13 @@ export default function FCMobileClient() {
 
             <div className="flex gap-3 mt-6 justify-center">
               <button className="fc-btn fc-btn-gold" onClick={handleSavePlayer}>
-                ≡ƒÆ╛ L╞░u
+                💾 Lưu
               </button>
               <button
                 className="fc-btn fc-btn-outline"
                 onClick={() => setShowPlayerModal(false)}
               >
-                Hß╗ºy
+                Hủy
               </button>
             </div>
           </div>
@@ -1371,7 +1371,7 @@ export default function FCMobileClient() {
         >
           <div className="fc-modal" onClick={(e) => e.stopPropagation()}>
             <h3>
-              ≡ƒÄ« Nhß║¡p Kß║┐t Quß║ú Trß║¡n ─Éß║Ñu ({selectedMatch?.phase === "GROUP" ? "Bo3 V├▓ng Loß║íi" : "Bo5 Chung Kß║┐t"})
+              🎮 Nhập Kết Quả Trận Đấu ({selectedMatch?.phase === "GROUP" ? "Bo3 Vòng Loại" : "Bo5 Chung Kết"})
             </h3>
             <div
               className="text-center mb-4"
@@ -1394,13 +1394,13 @@ export default function FCMobileClient() {
                 marginBottom: 16,
               }}
             >
-              Thß║»ng game = 3─æ | H├▓a game = 1─æ | Thua game = 0─æ
+              Thắng game = 3đ | Hòa game = 1đ | Thua game = 0đ
             </p>
 
             {/* Games List */}
             <div className="space-y-3 mb-4">
               {matchGames.map((game, index) => {
-                // T├¡nh tß╗òng game wins hiß╗çn tß║íi
+                // Tính tổng game wins hiện tại
                 let homeWinsSoFar = 0;
                 let awayWinsSoFar = 0;
                 for (let i = 0; i <= index; i++) {
@@ -1427,7 +1427,7 @@ export default function FCMobileClient() {
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
                         <label className="fc-label" style={{ fontSize: "0.7rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                          ΓÜ╜ {getPlayerName(selectedMatch.homePlayerId)}
+                          ⚽ {getPlayerName(selectedMatch.homePlayerId)}
                         </label>
                         <input
                           className="fc-input text-center font-bold"
@@ -1447,11 +1447,11 @@ export default function FCMobileClient() {
                           fontSize: "0.9rem", paddingTop: 20,
                         }}
                       >
-                        {game.winner === "home" ? "ΓùÇ" : game.winner === "away" ? "Γû╢" : "-"}
+                        {game.winner === "home" ? "◀" : game.winner === "away" ? "▶" : "-"}
                       </div>
                       <div className="flex-1">
                         <label className="fc-label" style={{ fontSize: "0.7rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                          ΓÜ╜ {getPlayerName(selectedMatch.awayPlayerId)}
+                          ⚽ {getPlayerName(selectedMatch.awayPlayerId)}
                         </label>
                         <input
                           className="fc-input text-center font-bold"
@@ -1471,7 +1471,7 @@ export default function FCMobileClient() {
                       className="mt-2 text-xs"
                       style={{ color: "var(--fc-text-muted)" }}
                     >
-                      Tß╗òng: {homeWinsSoFar} - {awayWinsSoFar}
+                      Tổng: {homeWinsSoFar} - {awayWinsSoFar}
                     </div>
                   </div>
                 );
@@ -1485,7 +1485,7 @@ export default function FCMobileClient() {
                 style={{ padding: "6px 16px", fontSize: "0.8rem" }}
                 onClick={handleAddGame}
               >
-                + Th├¬m Game
+                + Thêm Game
               </button>
               {matchGames.length > 1 && (
                 <button
@@ -1493,7 +1493,7 @@ export default function FCMobileClient() {
                   style={{ padding: "6px 16px", fontSize: "0.8rem" }}
                   onClick={handleRemoveLastGame}
                 >
-                  - X├│a Game Cuß╗æi
+                  - Xóa Game Cuối
                 </button>
             )}
             </div>
@@ -1520,7 +1520,7 @@ export default function FCMobileClient() {
                   ap += 1;
                 }
               }
-              // ─Éiß╗üu kiß╗çn kß║┐t th├║c: chß║ím targetWins hoß║╖c ─æß║Ñu ─æß╗º maxGames (cho ph├⌐p h├▓a ß╗ƒ v├▓ng loß║íi)
+              // Điều kiện kết thúc: chạm targetWins hoặc đấu đủ maxGames (cho phép hòa ở vòng loại)
               const isFinished = hw >= targetWins || aw >= targetWins || (isGroup && matchGames.length >= maxGames);
 
               return (
@@ -1554,10 +1554,10 @@ export default function FCMobileClient() {
                     className="text-xs mt-1"
                     style={{ color: "var(--fc-text-muted)" }}
                   >
-                    ─Éiß╗âm: {hp} - {ap}
+                    Điểm: {hp} - {ap}
                     {isFinished && (
                       <span style={{ color: "var(--fc-emerald)", marginLeft: 8 }}>
-                        {hw === aw ? "≡ƒñ¥ Trß║¡n ─æß║Ñu h├▓a (Chia ─æiß╗âm)!" : "Γ£à Trß║¡n ─æß║Ñu kß║┐t th├║c!"}
+                        {hw === aw ? "🤝 Trận đấu hòa (Chia điểm)!" : "✅ Trận đấu kết thúc!"}
                       </span>
                     )}
                   </div>
@@ -1567,13 +1567,13 @@ export default function FCMobileClient() {
 
             <div className="flex gap-3 justify-center">
               <button className="fc-btn fc-btn-gold" onClick={handleSaveMatch}>
-                ≡ƒÆ╛ L╞░u Kß║┐t Quß║ú
+                💾 Lưu Kết Quả
               </button>
               <button
                 className="fc-btn fc-btn-outline"
                 onClick={() => setShowMatchModal(false)}
               >
-                Hß╗ºy
+                Hủy
               </button>
             </div>
           </div>
@@ -1586,7 +1586,7 @@ export default function FCMobileClient() {
           onClick={() => setShowDetailModal(false)}
         >
           <div className="fc-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>≡ƒôï Chi Tiß║┐t Trß║¡n ─Éß║Ñu</h3>
+            <h3>📋 Chi Tiết Trận Đấu</h3>
             <div
               className="text-center mb-4"
               style={{ color: "var(--fc-text-muted)", fontSize: "0.9rem" }}
@@ -1600,7 +1600,7 @@ export default function FCMobileClient() {
               </strong>
             </div>
 
-            {/* Tß╗òng kß║┐t trß║¡n */}
+            {/* Tổng kết trận */}
             <div
               style={{
                 background: "rgba(16,185,129,0.1)",
@@ -1617,16 +1617,16 @@ export default function FCMobileClient() {
                 <span style={{ color: "var(--fc-blue)" }}>{detailMatch.awayScore}</span>
               </div>
               <div className="text-xs mt-1" style={{ color: "var(--fc-text-muted)" }}>
-                ─Éiß╗âm: {detailMatch.homePoints} - {detailMatch.awayPoints}
+                Điểm: {detailMatch.homePoints} - {detailMatch.awayPoints}
                 {detailMatch.winnerId && (
                   <span style={{ color: "var(--fc-gold)", marginLeft: 8 }}>
-                    ≡ƒÅå {getPlayerName(detailMatch.winnerId)}
+                    🏆 {getPlayerName(detailMatch.winnerId)}
                   </span>
                 )}
               </div>
             </div>
 
-            {/* Chi tiß║┐t tß╗½ng game */}
+            {/* Chi tiết từng game */}
             <div className="space-y-3 mb-4">
               {detailMatch.games.map((game, index) => (
                 <div
@@ -1647,7 +1647,7 @@ export default function FCMobileClient() {
                         ? getPlayerName(detailMatch.homePlayerId)
                         : game.winner === "away"
                         ? getPlayerName(detailMatch.awayPlayerId)
-                        : "H├▓a"}
+                        : "Hòa"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -1663,7 +1663,7 @@ export default function FCMobileClient() {
               ))}
             </div>
 
-            {/* Tß╗òng b├án thß║»ng */}
+            {/* Tổng bàn thắng */}
             {(() => {
               let totalGH = 0, totalGA = 0;
               for (const g of detailMatch.games) {
@@ -1679,11 +1679,11 @@ export default function FCMobileClient() {
                   border: "1px solid var(--fc-gold)",
                   marginBottom: 16,
                 }}>
-                  <div className="text-xs" style={{ color: "var(--fc-text-muted)", marginBottom: 4 }}>Tß╗òng b├án thß║»ng</div>
+                  <div className="text-xs" style={{ color: "var(--fc-text-muted)", marginBottom: 4 }}>Tổng bàn thắng</div>
                   <div style={{ fontWeight: 800, fontSize: "1.2rem" }}>
-                    <span style={{ color: "var(--fc-emerald)" }}>ΓÜ╜ {totalGH}</span>
+                    <span style={{ color: "var(--fc-emerald)" }}>⚽ {totalGH}</span>
                     <span style={{ color: "var(--fc-text-muted)", margin: "0 10px" }}>-</span>
-                    <span style={{ color: "var(--fc-blue)" }}>ΓÜ╜ {totalGA}</span>
+                    <span style={{ color: "var(--fc-blue)" }}>⚽ {totalGA}</span>
                   </div>
                 </div>
               );
@@ -1697,13 +1697,13 @@ export default function FCMobileClient() {
                   handleOpenMatchModal(detailMatch);
                 }}
               >
-                ≡ƒô¥ Sß╗¡a kß║┐t quß║ú
+                📝 Sửa kết quả
               </button>
               <button
                 className="fc-btn fc-btn-outline"
                 onClick={() => setShowDetailModal(false)}
               >
-                ─É├│ng
+                Đóng
               </button>
             </div>
           </div>

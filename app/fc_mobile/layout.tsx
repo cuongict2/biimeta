@@ -1,10 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import "./fc-mobile.css";
 
 export const metadata: Metadata = {
   title: "FC Mobile Tournament Manager",
   description:
-    "Quß║ún l├╜ giß║úi ─æß║Ñu FC Mobile chuy├¬n nghiß╗çp - Round Robin & Finals",
+    "Quản lý giải đấu FC Mobile chuyên nghiệp - Round Robin & Finals",
 };
 
 export default function FCMobileLayout({

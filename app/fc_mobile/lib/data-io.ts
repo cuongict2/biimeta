@@ -1,6 +1,6 @@
-﻿// ============================================================
+// ============================================================
 // FC MOBILE - FILE I/O (Read/Write tournament.json)
-// Safe File Write: ghi v├áo file tß║ím rß╗ôi rename ─æß╗â tr├ính corrupt
+// Safe File Write: ghi vào file tạm rồi rename để tránh corrupt
 // ============================================================
 
 import { supabase } from "../../../lib/supabase";
@@ -9,7 +9,7 @@ import { TournamentData, DEFAULT_TOURNAMENT_DATA } from "../types";
 const TOURNAMENT_ROW_ID = "main";
 
 /**
- * ─Éß╗ìc dß╗» liß╗çu giß║úi ─æß║Ñu tß╗½ Supabase.
+ * Đọc dữ liệu giải đấu từ Supabase.
  */
 export async function readTournamentData(): Promise<TournamentData> {
   try {
@@ -20,20 +20,20 @@ export async function readTournamentData(): Promise<TournamentData> {
       .single();
 
     if (error || !data) {
-      console.warn("[Supabase] Kh├┤ng t├¼m thß║Ñy dß╗» liß╗çu giß║úi ─æß║Ñu, tiß║┐n h├ánh tß║ío mß╗¢i...");
+      console.warn("[Supabase] Không tìm thấy dữ liệu giải đấu, tiến hành tạo mới...");
       await writeTournamentData(DEFAULT_TOURNAMENT_DATA);
       return { ...DEFAULT_TOURNAMENT_DATA };
     }
 
     return data.data as TournamentData;
   } catch (err) {
-    console.error("[Supabase Error] Lß╗ùi ─æß╗ìc dß╗» liß╗çu:", err);
+    console.error("[Supabase Error] Lỗi đọc dữ liệu:", err);
     return { ...DEFAULT_TOURNAMENT_DATA };
   }
 }
 
 /**
- * Ghi dß╗» liß╗çu giß║úi ─æß║Ñu v├áo Supabase.
+ * Ghi dữ liệu giải đấu vào Supabase.
  */
 export async function writeTournamentData(data: TournamentData): Promise<void> {
   try {
@@ -46,11 +46,11 @@ export async function writeTournamentData(data: TournamentData): Promise<void> {
       });
 
     if (error) {
-      console.error("[Supabase Error] Kh├┤ng thß╗â ghi dß╗» liß╗çu:", error.message);
+      console.error("[Supabase Error] Không thể ghi dữ liệu:", error.message);
       throw error;
     }
   } catch (err) {
-    console.error("[Supabase Error] Lß╗ùi ghi dß╗» liß╗çu:", err);
+    console.error("[Supabase Error] Lỗi ghi dữ liệu:", err);
     throw err;
   }
 }

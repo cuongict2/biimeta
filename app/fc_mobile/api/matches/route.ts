@@ -1,5 +1,5 @@
-﻿// ============================================================
-// API: /fc_mobile/api/matches - Cß║¡p nhß║¡t kß║┐t quß║ú trß║¡n ─æß║Ñu
+// ============================================================
+// API: /fc_mobile/api/matches - Cập nhật kết quả trận đấu
 // ============================================================
 
 import { NextRequest } from "next/server";
@@ -12,13 +12,13 @@ import {
 } from "../../lib/tournament-logic";
 import { GameResult } from "../../types";
 
-// GET - Lß║Ñy danh s├ích trß║¡n ─æß║Ñu
+// GET - Lấy danh sách trận đấu
 export async function GET() {
   const data = await readTournamentData();
   return Response.json({ matches: data.matches });
 }
 
-// PUT - Cß║¡p nhß║¡t kß║┐t quß║ú 1 trß║¡n ─æß║Ñu
+// PUT - Cập nhật kết quả 1 trận đấu
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
@@ -29,18 +29,18 @@ export async function PUT(req: NextRequest) {
 
     if (!matchId || !games) {
       return Response.json(
-        { error: "matchId v├á games l├á bß║»t buß╗Öc." },
+        { error: "matchId và games là bắt buộc." },
         { status: 400 }
       );
     }
 
-    // T├¼m trß║¡n tr╞░ß╗¢c ─æß╗â lß║Ñy phase cho viß╗çc kiß╗âm tra
+    // Tìm trận trước để lấy phase cho việc kiểm tra
     let data = await readTournamentData();
     const matchIndex = data.matches.findIndex((m) => m.id === matchId);
 
     if (matchIndex === -1) {
       return Response.json(
-        { error: "Kh├┤ng t├¼m thß║Ñy trß║¡n ─æß║Ñu." },
+        { error: "Không tìm thấy trận đấu." },
         { status: 404 }
       );
     }
@@ -52,7 +52,7 @@ export async function PUT(req: NextRequest) {
     const maxGames = isGroup ? 3 : 5;
     if (games.length > maxGames) {
       return Response.json(
-        { error: `Trß║¡n ─æß║Ñu v├▓ng ${isGroup ? "loß║íi (Bo3)" : "chung kß║┐t (Bo5)"} tß╗æi ─æa ${maxGames} game.` },
+        { error: `Trận đấu vòng ${isGroup ? "loại (Bo3)" : "chung kết (Bo5)"} tối đa ${maxGames} game.` },
         { status: 400 }
       );
     }
@@ -60,24 +60,24 @@ export async function PUT(req: NextRequest) {
     for (const game of games) {
       if ((game.goalsHome ?? 0) < 0 || (game.goalsAway ?? 0) < 0) {
         return Response.json(
-          { error: "B├án thß║»ng/Tß╗ë sß╗æ kh├┤ng ─æ╞░ß╗úc ├óm." },
+          { error: "Bàn thắng/Tỉ số không được âm." },
           { status: 400 }
         );
       }
-      // ─Éß║úm bß║úo goalsHome/goalsAway lu├┤n c├│ gi├í trß╗ï sß╗æ nguy├¬n
+      // Đảm bảo goalsHome/goalsAway luôn có giá trị số nguyên
       game.goalsHome = game.goalsHome ?? 0;
       game.goalsAway = game.goalsAway ?? 0;
 
-      // Tß╗▒ ─æß╗Öng g├ín lß║íi winner dß╗▒a tr├¬n b├án thß║»ng thß╗▒c tß║┐
+      // Tự động gán lại winner dựa trên bàn thắng thực tế
       if (game.goalsHome > game.goalsAway) game.winner = "home";
       else if (game.goalsAway > game.goalsHome) game.winner = "away";
       else game.winner = "draw";
     }
 
-    // T├¡nh to├ín kß║┐t quß║ú
+    // Tính toán kết quả
     const result = calculateMatchResult(games, isGroup);
 
-    // Cß║¡p nhß║¡t trß║¡n ─æß║Ñu
+    // Cập nhật trận đấu
     data.matches[matchIndex] = {
       ...match,
       games,
@@ -93,20 +93,20 @@ export async function PUT(req: NextRequest) {
       status: result.isCompleted ? "COMPLETED" : "IN_PROGRESS",
     };
 
-    // T├¡nh lß║íi BXH nß║┐u l├á trß║¡n v├▓ng loß║íi
+    // Tính lại BXH nếu là trận vòng loại
     if (match.phase === "GROUP") {
       data.standings = calculateStandings(
         data.config.selectedPlayerIds,
         data.matches
       );
 
-      // Kiß╗âm tra xem tß║Ñt cß║ú trß║¡n v├▓ng loß║íi ─æ├ú xong ch╞░a
+      // Kiểm tra xem tất cả trận vòng loại đã xong chưa
       if (areAllGroupMatchesCompleted(data.matches)) {
         data = assignFinalsPlayers(data);
       }
     }
 
-    // Kiß╗âm tra nß║┐u c├íc trß║¡n chung kß║┐t hiß╗çn c├│ ─æ├ú xong
+    // Kiểm tra nếu các trận chung kết hiện có đã xong
     const finals = data.matches.filter(
       (m) => m.phase === "FINAL" || m.phase === "THIRD_PLACE"
     );
@@ -129,7 +129,7 @@ export async function PUT(req: NextRequest) {
   } catch (err: any) {
     console.error("[API Matches PUT Error]:", err);
     return Response.json(
-      { error: err.message || "Lß╗ùi Server nß╗Öi bß╗Ö", details: err.toString() },
+      { error: err.message || "Lỗi Server nội bộ", details: err.toString() },
       { status: 500 }
     );
   }
