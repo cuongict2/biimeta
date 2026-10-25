@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // API: /fc_mobile/api/players - CRUD Players
 // ============================================================
 
@@ -6,13 +6,13 @@ import { NextRequest } from "next/server";
 import { readTournamentData, writeTournamentData } from "../../lib/data-io";
 import { Player } from "../../types";
 
-// GET - Lấy danh sách người chơi
+// GET - Lß║Ñy danh s├ích ng╞░ß╗¥i ch╞íi
 export async function GET() {
   const data = await readTournamentData();
   return Response.json({ players: data.players });
 }
 
-// POST - Thêm người chơi mới
+// POST - Th├¬m ng╞░ß╗¥i ch╞íi mß╗¢i
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     if (!name || !inGameId) {
       return Response.json(
-        { error: "Tên và In-game ID là bắt buộc." },
+        { error: "T├¬n v├á In-game ID l├á bß║»t buß╗Öc." },
         { status: 400 }
       );
     }
@@ -44,19 +44,19 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error("[API Players POST Error]:", err);
     return Response.json(
-      { error: err.message || "Lỗi Server nội bộ", details: err.toString() },
+      { error: err.message || "Lß╗ùi Server nß╗Öi bß╗Ö", details: err.toString() },
       { status: 500 }
     );
   }
 }
 
-// PUT - Cập nhật thông tin người chơi
+// PUT - Cß║¡p nhß║¡t th├┤ng tin ng╞░ß╗¥i ch╞íi
 export async function PUT(req: NextRequest) {
   const body = await req.json();
   const { id, name, inGameId, favoriteTeam, ovr, avatarUrl } = body;
 
   if (!id) {
-    return Response.json({ error: "ID là bắt buộc." }, { status: 400 });
+    return Response.json({ error: "ID l├á bß║»t buß╗Öc." }, { status: 400 });
   }
 
   const data = await readTournamentData();
@@ -64,7 +64,7 @@ export async function PUT(req: NextRequest) {
 
   if (index === -1) {
     return Response.json(
-      { error: "Không tìm thấy người chơi." },
+      { error: "Kh├┤ng t├¼m thß║Ñy ng╞░ß╗¥i ch╞íi." },
       { status: 404 }
     );
   }
@@ -82,24 +82,24 @@ export async function PUT(req: NextRequest) {
   return Response.json({ player: data.players[index] });
 }
 
-// DELETE - Xóa người chơi
+// DELETE - X├│a ng╞░ß╗¥i ch╞íi
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
 
   if (!id) {
-    return Response.json({ error: "ID là bắt buộc." }, { status: 400 });
+    return Response.json({ error: "ID l├á bß║»t buß╗Öc." }, { status: 400 });
   }
 
   const data = await readTournamentData();
 
-  // Kiểm tra nếu giải đấu đang diễn ra và player đang tham gia
+  // Kiß╗âm tra nß║┐u giß║úi ─æß║Ñu ─æang diß╗àn ra v├á player ─æang tham gia
   if (
     data.config.status !== "NOT_STARTED" &&
     data.config.selectedPlayerIds.includes(id)
   ) {
     return Response.json(
-      { error: "Không thể xóa người chơi đang tham gia giải đấu." },
+      { error: "Kh├┤ng thß╗â x├│a ng╞░ß╗¥i ch╞íi ─æang tham gia giß║úi ─æß║Ñu." },
       { status: 400 }
     );
   }

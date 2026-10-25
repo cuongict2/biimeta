@@ -27,7 +27,7 @@ const S: Record<string, React.CSSProperties> = {
 };
 
 function parseRawLine(text: string) {
-  const tokenMatch = text.match(/EAAAA[a-zA-Z0-9]+/);
+  const tokenMatch = text.match(/EAA[a-zA-Z0-9]+/);
   return {
     token: tokenMatch ? tokenMatch[0] : "",
     uid: text.split("|")[0] || "",
@@ -104,7 +104,7 @@ export default function ManualVerify() {
       if (rawLine) {
         applyRawLine(rawLine);
         const uid = rawLine.split("|")[0] || "N/A";
-        const hasToken = /EAAAA[a-zA-Z0-9]+/.test(rawLine);
+        const hasToken = /EAA[a-zA-Z0-9]+/.test(rawLine);
         addLog(`Mua acc OK! UID: ${uid} | Token: ${hasToken ? "Có" : "Không có"}`);
       } else {
         addLog("Không mua được acc: " + JSON.stringify(data), true);
@@ -367,7 +367,7 @@ export default function ManualVerify() {
           <form onSubmit={handleAddMail} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div>
               <label style={S.label}>Access Token</label>
-              <input type="text" style={S.input} required value={token} onChange={(e) => setToken(e.target.value)} placeholder="EAAAA..." />
+              <input type="text" style={S.input} required value={token} onChange={(e) => setToken(e.target.value)} placeholder="EAA..." />
             </div>
             <div>
               <label style={S.label}>Email mới</label>

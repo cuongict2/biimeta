@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // FC MOBILE TOURNAMENT MANAGER - TYPE DEFINITIONS
 // ============================================================
 
@@ -13,8 +13,8 @@ export type Player = {
 };
 
 export type GameResult = {
-  goalsHome: number;  // Bàn thắng/Tỉ số home ghi được trong game
-  goalsAway: number;  // Bàn thắng/Tỉ số away ghi được trong game
+  goalsHome: number;  // B├án thß║»ng/Tß╗ë sß╗æ home ghi ─æ╞░ß╗úc trong game
+  goalsAway: number;  // B├án thß║»ng/Tß╗ë sß╗æ away ghi ─æ╞░ß╗úc trong game
   winner: "home" | "away" | "draw";
 };
 
@@ -24,17 +24,17 @@ export type MatchPhase = "GROUP" | "FINAL" | "THIRD_PLACE";
 export type Match = {
   id: string;
   phase: MatchPhase;
-  round: number; // 1 = lượt đi, 2 = lượt về
+  round: number; // 1 = l╞░ß╗út ─æi, 2 = l╞░ß╗út vß╗ü
   homePlayerId: string;
   awayPlayerId: string;
-  games: GameResult[]; // Tối đa 5 game (Bo5)
-  homeScore: number; // Số game thắng của home
-  awayScore: number; // Số game thắng của away
-  homePoints: number; // Tổng điểm home nhận được
-  awayPoints: number; // Tổng điểm away nhận được
+  games: GameResult[]; // Tß╗æi ─æa 5 game (Bo5)
+  homeScore: number; // Sß╗æ game thß║»ng cß╗ºa home
+  awayScore: number; // Sß╗æ game thß║»ng cß╗ºa away
+  homePoints: number; // Tß╗òng ─æiß╗âm home nhß║¡n ─æ╞░ß╗úc
+  awayPoints: number; // Tß╗òng ─æiß╗âm away nhß║¡n ─æ╞░ß╗úc
   winnerId: string | null;
   status: MatchStatus;
-  matchDay: number; // Ngày thi đấu thứ mấy
+  matchDay: number; // Ng├áy thi ─æß║Ñu thß╗⌐ mß║Ñy
 };
 
 export type StandingEntry = {
@@ -47,9 +47,9 @@ export type StandingEntry = {
   gamesLost: number;
   gamesDraw: number;
   gameDifference: number;
-  goalsFor: number;       // Tổng bàn thắng ghi được
-  goalsAgainst: number;   // Tổng bàn thắng bị thủng
-  goalDifference: number; // Hiệu số bàn thắng
+  goalsFor: number;       // Tß╗òng b├án thß║»ng ghi ─æ╞░ß╗úc
+  goalsAgainst: number;   // Tß╗òng b├án thß║»ng bß╗ï thß╗ºng
+  goalDifference: number; // Hiß╗çu sß╗æ b├án thß║»ng
   points: number;
   rank: number;
 };

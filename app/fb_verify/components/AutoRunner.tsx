@@ -134,7 +134,7 @@ export default function AutoRunner() {
     sttRef.current++;
     const cStt = sttRef.current;
     const uid = rawLine.split("|")[0] || "N/A";
-    const tokenMatch = rawLine.match(/EAAAA[a-zA-Z0-9]+/);
+    const tokenMatch = rawLine.match(/EAA[a-zA-Z0-9]+/);
     const token = tokenMatch ? tokenMatch[0] : "";
     const rowId = `row-${Date.now()}-${cStt}`;
     const startTime = Date.now();

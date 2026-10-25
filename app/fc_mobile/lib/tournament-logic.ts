@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 // FC MOBILE - TOURNAMENT LOGIC (Schedule Generation, Scoring, Standings)
 // ============================================================
 
@@ -10,8 +10,8 @@ import {
 } from "../types";
 
 /**
- * Sinh lịch thi đấu Round Robin bằng thuật toán vòng tròn (Circle Method).
- * Nếu số người chơi lẻ, thêm "BYE" để đảm bảo chẵn.
+ * Sinh lß╗ïch thi ─æß║Ñu Round Robin bß║▒ng thuß║¡t to├ín v├▓ng tr├▓n (Circle Method).
+ * Nß║┐u sß╗æ ng╞░ß╗¥i ch╞íi lß║╗, th├¬m "BYE" ─æß╗â ─æß║úm bß║úo chß║╡n.
  */
 export function generateRoundRobinSchedule(
   playerIds: string[],
@@ -30,7 +30,7 @@ export function generateRoundRobinSchedule(
   const rounds = totalPlayers - 1;
   const matchesPerRound = totalPlayers / 2;
 
-  // Thuật toán circle method
+  // Thuß║¡t to├ín circle method
   const fixed = players[totalPlayers - 1];
   const rotating = players.slice(0, totalPlayers - 1);
 
@@ -46,10 +46,10 @@ export function generateRoundRobinSchedule(
         const home = currentRound[i];
         const away = currentRound[totalPlayers - 1 - i];
 
-        // Bỏ qua trận có BYE
+        // Bß╗Å qua trß║¡n c├│ BYE
         if (home === "BYE" || away === "BYE") continue;
 
-        // Lượt về thì đảo sân
+        // L╞░ß╗út vß╗ü th├¼ ─æß║úo s├ón
         const actualHome = leg === 2 ? away : home;
         const actualAway = leg === 2 ? home : away;
 
@@ -71,7 +71,7 @@ export function generateRoundRobinSchedule(
       }
 
       matchDay++;
-      // Xoay mảng: phần tử cuối lên đầu
+      // Xoay mß║úng: phß║ºn tß╗¡ cuß╗æi l├¬n ─æß║ºu
       rotatingCopy.unshift(rotatingCopy.pop()!);
     }
   }
@@ -80,7 +80,7 @@ export function generateRoundRobinSchedule(
 }
 
 /**
- * Sinh 2 trận chung kết (Nhất-Nhì, Ba-Tư)
+ * Sinh 2 trß║¡n chung kß║┐t (Nhß║Ñt-Nh├¼, Ba-T╞░)
  */
 export function generateFinalsMatches(): Match[] {
   return [
@@ -118,9 +118,9 @@ export function generateFinalsMatches(): Match[] {
 }
 
 /**
- * Tính điểm cho 1 trận đấu Bo5 từ danh sách games.
- * Thắng game = 3đ, Hòa game = 1đ, Thua game = 0đ.
- * Trận kết thúc khi 1 bên thắng 3 game.
+ * T├¡nh ─æiß╗âm cho 1 trß║¡n ─æß║Ñu Bo5 tß╗½ danh s├ích games.
+ * Thß║»ng game = 3─æ, H├▓a game = 1─æ, Thua game = 0─æ.
+ * Trß║¡n kß║┐t th├║c khi 1 b├¬n thß║»ng 3 game.
  */
 export function calculateMatchResult(games: GameResult[], isGroupPhase: boolean = true): {
   homeScore: number;
@@ -156,7 +156,7 @@ export function calculateMatchResult(games: GameResult[], isGroupPhase: boolean 
   let awayPoints = 0;
 
   if (isGroupPhase) {
-    // Vòng loại: chạm 2 game thắng là kết thúc sớm, hoặc đã đá đủ 3 game
+    // V├▓ng loß║íi: chß║ím 2 game thß║»ng l├á kß║┐t th├║c sß╗¢m, hoß║╖c ─æ├ú ─æ├í ─æß╗º 3 game
     const hasWinner = homeWins >= 2 || awayWins >= 2;
     const reachedMaxGames = games.length >= 3;
 
@@ -167,10 +167,10 @@ export function calculateMatchResult(games: GameResult[], isGroupPhase: boolean 
       isCompleted = true;
       if (homeWins > awayWins) winnerId = "home";
       else if (awayWins > homeWins) winnerId = "away";
-      else winnerId = null; // Hòa
+      else winnerId = null; // H├▓a
     }
 
-    // Tính điểm trên BXH cho vòng loại
+    // T├¡nh ─æiß╗âm tr├¬n BXH cho v├▓ng loß║íi
     if (isCompleted) {
       if (winnerId === "home") {
         homePoints = 3;
@@ -179,13 +179,13 @@ export function calculateMatchResult(games: GameResult[], isGroupPhase: boolean 
         homePoints = 0;
         awayPoints = 3;
       } else {
-        // Hòa
+        // H├▓a
         homePoints = 1;
         awayPoints = 1;
       }
     }
   } else {
-    // Chung kết: chạm 3 game thắng là kết thúc sớm, hoặc đấu đủ 5 game
+    // Chung kß║┐t: chß║ím 3 game thß║»ng l├á kß║┐t th├║c sß╗¢m, hoß║╖c ─æß║Ñu ─æß╗º 5 game
     const hasWinner = homeWins >= 3 || awayWins >= 3;
     const reachedMaxGames = games.length >= 5;
 
@@ -223,7 +223,7 @@ export function calculateMatchResult(games: GameResult[], isGroupPhase: boolean 
 }
 
 /**
- * Tính BXH vòng loại từ danh sách trận đấu đã hoàn thành.
+ * T├¡nh BXH v├▓ng loß║íi tß╗½ danh s├ích trß║¡n ─æß║Ñu ─æ├ú ho├án th├ánh.
  */
 export function calculateStandings(
   playerIds: string[],
@@ -231,7 +231,7 @@ export function calculateStandings(
 ): StandingEntry[] {
   const map = new Map<string, StandingEntry>();
 
-  // Khởi tạo
+  // Khß╗ƒi tß║ío
   for (const pid of playerIds) {
     map.set(pid, {
       playerId: pid,
@@ -251,7 +251,7 @@ export function calculateStandings(
     });
   }
 
-  // Chỉ tính trận GROUP đã COMPLETED
+  // Chß╗ë t├¡nh trß║¡n GROUP ─æ├ú COMPLETED
   const groupMatches = matches.filter(
     (m) => m.phase === "GROUP" && m.status === "COMPLETED"
   );
@@ -264,7 +264,7 @@ export function calculateStandings(
     home.played++;
     away.played++;
 
-    // Tổng điểm
+    // Tß╗òng ─æiß╗âm
     home.points += match.homePoints;
     away.points += match.awayPoints;
 
@@ -301,35 +301,35 @@ export function calculateStandings(
     }
   }
 
-  // Tính game difference + goal difference
+  // T├¡nh game difference + goal difference
   for (const entry of map.values()) {
     entry.gameDifference = entry.gamesWon - entry.gamesLost;
     entry.goalDifference = entry.goalsFor - entry.goalsAgainst;
   }
 
-  // Sắp xếp
+  // Sß║»p xß║┐p
   const standings = Array.from(map.values());
   standings.sort((a, b) => {
-    // 1. Tổng điểm
+    // 1. Tß╗òng ─æiß╗âm
     if (b.points !== a.points) return b.points - a.points;
-    // 2. Hiệu số game
+    // 2. Hiß╗çu sß╗æ game
     if (b.gameDifference !== a.gameDifference)
       return b.gameDifference - a.gameDifference;
-    // 3. Hiệu số bàn thắng
+    // 3. Hiß╗çu sß╗æ b├án thß║»ng
     if (b.goalDifference !== a.goalDifference)
       return b.goalDifference - a.goalDifference;
-    // 4. Đối đầu trực tiếp
+    // 4. ─Éß╗æi ─æß║ºu trß╗▒c tiß║┐p
     return resolveHeadToHead(a.playerId, b.playerId, groupMatches);
   });
 
-  // Gán rank
+  // G├ín rank
   standings.forEach((s, i) => (s.rank = i + 1));
 
   return standings;
 }
 
 /**
- * Giải quyết đối đầu trực tiếp giữa 2 người chơi.
+ * Giß║úi quyß║┐t ─æß╗æi ─æß║ºu trß╗▒c tiß║┐p giß╗»a 2 ng╞░ß╗¥i ch╞íi.
  */
 function resolveHeadToHead(
   playerAId: string,
@@ -355,7 +355,7 @@ function resolveHeadToHead(
 }
 
 /**
- * Kiểm tra xem tất cả trận vòng loại đã hoàn thành chưa.
+ * Kiß╗âm tra xem tß║Ñt cß║ú trß║¡n v├▓ng loß║íi ─æ├ú ho├án th├ánh ch╞░a.
  */
 export function areAllGroupMatchesCompleted(matches: Match[]): boolean {
   const groupMatches = matches.filter((m) => m.phase === "GROUP");
@@ -365,7 +365,7 @@ export function areAllGroupMatchesCompleted(matches: Match[]): boolean {
 }
 
 /**
- * Gán người chơi vào trận chung kết dựa trên BXH.
+ * G├ín ng╞░ß╗¥i ch╞íi v├áo trß║¡n chung kß║┐t dß╗▒a tr├¬n BXH.
  */
 export function assignFinalsPlayers(
   data: TournamentData
@@ -393,7 +393,7 @@ export function assignFinalsPlayers(
       return m;
     });
   } else {
-    // Nếu chỉ có 3 người chơi, bỏ trận tranh hạng 3
+    // Nß║┐u chß╗ë c├│ 3 ng╞░ß╗¥i ch╞íi, bß╗Å trß║¡n tranh hß║íng 3
     updatedMatches = updatedMatches.filter((m) => m.phase !== "THIRD_PLACE");
   }
 

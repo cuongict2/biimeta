@@ -2,9 +2,10 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+cd "C:\Users\Admin\OneDrive\IT\WEB\PROJECT\Next.js\biimeta";
 git status
 git add .
-git commit -m "Update"
+git commit -m "Update manual"
 git push
 
 
